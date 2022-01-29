@@ -22,11 +22,16 @@ export type AddRatingInput = {
   userId: Scalars['ID'];
 };
 
+/** Represents a postal address, used to find Shops that sell `Beer` */
 export type Address = {
   __typename?: 'Address';
+  /** Name of the city */
   city: Scalars['String'];
+  /** Country of this Address */
   country: Scalars['String'];
+  /** Postal code */
   postalCode: Scalars['String'];
+  /** The street */
   street: Scalars['String'];
 };
 
@@ -37,18 +42,26 @@ export type Authentication = {
   username: Scalars['String'];
 };
 
+/** Representation of a Beer that has been rated */
 export type Beer = {
   __typename?: 'Beer';
+  /** Average Rating of this Beer */
   averageStars: Scalars['Int'];
+  /** Unique, immutable Id, that identifies this Beer */
   id: Scalars['ID'];
+  /** The name of the beer */
   name: Scalars['String'];
+  /** The Beer's price */
   price: Scalars['String'];
+  /** List of all Ratings for this Beer */
   ratings: Array<Rating>;
+  /** List of Ratings that has at exactly 'stars' Stars */
   ratingsWithStars: Array<Rating>;
   shops: Array<Shop>;
 };
 
 
+/** Representation of a Beer that has been rated */
 export type BeerRatingsWithStarsArgs = {
   stars: Scalars['Int'];
 };
@@ -61,8 +74,14 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Add a new `Rating` to a `Beer` and returns the new created `Rating` */
   addRating: Rating;
   login: LoginResponse;
+  /**
+   * Change the name of this `Beer`.
+   *
+   * Note: this is only allowed for admins (currently user 'U5' / 'nils')
+   */
   updateBeerName: Beer;
 };
 
@@ -84,10 +103,18 @@ export type MutationUpdateBeerNameArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Returns a specific `Beer`, identified by its `id`, or `null` if not found */
   beer?: Maybe<Beer>;
+  /** Returns a list of all `Beer` objects that we have in our system */
   beers: Array<Beer>;
   ping: Scalars['String'];
+  /**
+   * Returns a single `Shop`, identified by its `id`.
+   *
+   * - If there is no shop with the specified `id`, then `null` is returned
+   */
   shop?: Maybe<Shop>;
+  /** Returns a list of all Shops that are part of our network */
   shops: Array<Shop>;
 };
 
@@ -106,20 +133,31 @@ export type QueryShopArgs = {
   shopId: Scalars['ID'];
 };
 
+/** A Rating that has been written by an Author for a Beer */
 export type Rating = {
   __typename?: 'Rating';
+  /** Who has written this Rating? */
   author: User;
+  /** The  beer, this Rating is written for */
   beer: Beer;
+  /** A comment for this beer */
   comment: Scalars['String'];
+  /** An immutable unique Id */
   id: Scalars['ID'];
+  /** Number of stars given with this rating */
   stars: Scalars['Int'];
 };
 
+/** A registered Shop that sells Beer */
 export type Shop = {
   __typename?: 'Shop';
+  /** Address of the shop */
   address: Address;
+  /** All Beers this shop sells */
   beers: Array<Beer>;
+  /** Unique ID of this shop */
   id: Scalars['ID'];
+  /** The name of the shop */
   name: Scalars['String'];
 };
 
@@ -134,6 +172,7 @@ export type SubscriptionNewRatingsArgs = {
   beerId: Scalars['ID'];
 };
 
+/** A User in our system that is allowed to leave Ratings */
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
@@ -141,30 +180,100 @@ export type User = {
   name: Scalars['String'];
 };
 
-export type BeerRatingsFragment = { __typename?: 'Beer', id: string, ratings: Array<{ __typename?: 'Rating', id: string }> };
+export type BeerRatingsFragment = (
+  { __typename?: 'Beer' }
+  & Pick<Beer, 'id'>
+  & { ratings: Array<(
+    { __typename?: 'Rating' }
+    & Pick<Rating, 'id'>
+  )> }
+);
 
 export type AddRatingMutationVariables = Exact<{
   input: AddRatingInput;
 }>;
 
 
-export type AddRatingMutation = { __typename?: 'Mutation', addRating: { __typename?: 'Rating', id: string, comment: string, stars: number, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } } };
+export type AddRatingMutation = (
+  { __typename?: 'Mutation' }
+  & { addRating: (
+    { __typename?: 'Rating' }
+    & Pick<Rating, 'id' | 'comment' | 'stars'>
+    & { beer: (
+      { __typename?: 'Beer' }
+      & Pick<Beer, 'id'>
+    ), author: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
+  ) }
+);
 
 export type NewRatingSubscriptionVariables = Exact<{
   beerId: Scalars['ID'];
 }>;
 
 
-export type NewRatingSubscription = { __typename?: 'Subscription', rating: { __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } } };
+export type NewRatingSubscription = (
+  { __typename?: 'Subscription' }
+  & { rating: (
+    { __typename?: 'Rating' }
+    & Pick<Rating, 'id' | 'stars' | 'comment'>
+    & { beer: (
+      { __typename?: 'Beer' }
+      & Pick<Beer, 'id'>
+    ), author: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
+  ) }
+);
 
-export type SingleBeerFragment = { __typename?: 'Beer', id: string, name: string, price: string, ratings: Array<{ __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } }>, shops: Array<{ __typename?: 'Shop', id: string, name: string }> };
+export type SingleBeerFragment = (
+  { __typename?: 'Beer' }
+  & Pick<Beer, 'id' | 'name' | 'price'>
+  & { ratings: Array<(
+    { __typename?: 'Rating' }
+    & Pick<Rating, 'id' | 'stars' | 'comment'>
+    & { beer: (
+      { __typename?: 'Beer' }
+      & Pick<Beer, 'id'>
+    ), author: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
+  )>, shops: Array<(
+    { __typename?: 'Shop' }
+    & Pick<Shop, 'id' | 'name'>
+  )> }
+);
 
 export type BeerPageQueryVariables = Exact<{
   beerId: Scalars['ID'];
 }>;
 
 
-export type BeerPageQuery = { __typename?: 'Query', beer?: { __typename?: 'Beer', id: string, name: string, price: string, ratings: Array<{ __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } }>, shops: Array<{ __typename?: 'Shop', id: string, name: string }> } | null | undefined };
+export type BeerPageQuery = (
+  { __typename?: 'Query' }
+  & { beer?: Maybe<(
+    { __typename?: 'Beer' }
+    & Pick<Beer, 'id' | 'name' | 'price'>
+    & { ratings: Array<(
+      { __typename?: 'Rating' }
+      & Pick<Rating, 'id' | 'stars' | 'comment'>
+      & { beer: (
+        { __typename?: 'Beer' }
+        & Pick<Beer, 'id'>
+      ), author: (
+        { __typename?: 'User' }
+        & Pick<User, 'name'>
+      ) }
+    )>, shops: Array<(
+      { __typename?: 'Shop' }
+      & Pick<Shop, 'id' | 'name'>
+    )> }
+  )> }
+);
 
 export type UpdateBeerNameMutationVariables = Exact<{
   beerId: Scalars['ID'];
@@ -172,28 +281,73 @@ export type UpdateBeerNameMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBeerNameMutation = { __typename?: 'Mutation', updatedBeer: { __typename?: 'Beer', id: string, name: string } };
+export type UpdateBeerNameMutation = (
+  { __typename?: 'Mutation' }
+  & { updatedBeer: (
+    { __typename?: 'Beer' }
+    & Pick<Beer, 'id' | 'name'>
+  ) }
+);
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', error?: string | null | undefined, authentication?: { __typename?: 'Authentication', userId: string, username: string, authToken: string } | null | undefined } };
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'LoginResponse' }
+    & Pick<LoginResponse, 'error'>
+    & { authentication?: Maybe<(
+      { __typename?: 'Authentication' }
+      & Pick<Authentication, 'userId' | 'username' | 'authToken'>
+    )> }
+  ) }
+);
 
 export type OverviewPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OverviewPageQuery = { __typename?: 'Query', beers: Array<{ __typename?: 'Beer', id: string, name: string, averageStars: number }> };
+export type OverviewPageQuery = (
+  { __typename?: 'Query' }
+  & { beers: Array<(
+    { __typename?: 'Beer' }
+    & Pick<Beer, 'id' | 'name' | 'averageStars'>
+  )> }
+);
 
-export type ShopFragment = { __typename?: 'Shop', id: string, name: string, address: { __typename?: 'Address', street: string, postalCode: string, city: string, country: string }, beers: Array<{ __typename?: 'Beer', id: string, name: string }> };
+export type ShopFragment = (
+  { __typename?: 'Shop' }
+  & Pick<Shop, 'id' | 'name'>
+  & { address: (
+    { __typename?: 'Address' }
+    & Pick<Address, 'street' | 'postalCode' | 'city' | 'country'>
+  ), beers: Array<(
+    { __typename?: 'Beer' }
+    & Pick<Beer, 'id' | 'name'>
+  )> }
+);
 
 export type ShopPageQueryVariables = Exact<{
   shopId: Scalars['ID'];
 }>;
 
 
-export type ShopPageQuery = { __typename?: 'Query', shop?: { __typename?: 'Shop', id: string, name: string, address: { __typename?: 'Address', street: string, postalCode: string, city: string, country: string }, beers: Array<{ __typename?: 'Beer', id: string, name: string }> } | null | undefined };
+export type ShopPageQuery = (
+  { __typename?: 'Query' }
+  & { shop?: Maybe<(
+    { __typename?: 'Shop' }
+    & Pick<Shop, 'id' | 'name'>
+    & { address: (
+      { __typename?: 'Address' }
+      & Pick<Address, 'street' | 'postalCode' | 'city' | 'country'>
+    ), beers: Array<(
+      { __typename?: 'Beer' }
+      & Pick<Beer, 'id' | 'name'>
+    )> }
+  )> }
+);
 
 export const BeerRatingsFragmentDoc = gql`
     fragment BeerRatings on Beer {
