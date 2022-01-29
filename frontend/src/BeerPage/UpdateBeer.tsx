@@ -1,30 +1,17 @@
 import { useMutation } from "@apollo/client";
 import { useAuthContext } from "AuthContext";
-import gql from "graphql-tag";
 import React from "react";
 import styles from "./Form.module.css";
-import { BeerPageQuery_beer } from "./querytypes/BeerPageQuery";
-import { UpdateBeerNameMutation, UpdateBeerNameMutationVariables } from "./querytypes/UpdateBeerNameMutation";
 import { isValidAuth } from "types";
+import { SingleBeerFragment, useUpdateBeerNameMutation } from "../generated/graphql";
 
 type UpdateBeerProps = {
-  beer: BeerPageQuery_beer;
+  beer: SingleBeerFragment;
 };
-
-const UPDATE_BEERNAME_MUTATION = gql`
-  mutation UpdateBeerNameMutation($beerId: ID!, $newName: String!) {
-    updatedBeer: updateBeerName(beerId: $beerId, newName: $newName) {
-      id
-      name
-    }
-  }
-`;
 
 export default function UpdateBeer({ beer }: UpdateBeerProps) {
   const { auth } = useAuthContext();
-  const [updateBeerName, { error, data }] = useMutation<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>(
-    UPDATE_BEERNAME_MUTATION
-  );
+  const [updateBeerName, { error, data }] = useUpdateBeerNameMutation();
 
   function onBeerNameChange(newBeerName: string) {
     updateBeerName({

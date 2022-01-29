@@ -1,24 +1,12 @@
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
 import Stars from "../components";
 import styles from "./OverviewPage.module.css";
+import { useOverviewPageQuery } from "../generated/graphql";
+import { useHistory } from "react-router-dom";
 
-const OVERVIEW_PAGE_QUERY = gql`
-  query OverviewPageQuery {
-    beers {
-      id
-      name
-      averageStars
-    }
-  }
-`;
-
-type OverviewPageProps = RouteComponentProps;
-
-export function OverviewPage({ history }: OverviewPageProps) {
-  const { loading, error, data } = useQuery(OVERVIEW_PAGE_QUERY);
+export function OverviewPage() {
+  const history = useHistory();
+  const { loading, error, data } = useOverviewPageQuery();
 
   if (error) {
     return <h1>Error while loading Beers</h1>;

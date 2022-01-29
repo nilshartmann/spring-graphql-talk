@@ -1,0 +1,27 @@
+fragment SingleBeer on Beer {
+  id
+  name
+  price
+  ratings {
+    id
+    stars
+
+    beer {
+      id
+    }
+    author {
+      name
+    }
+    comment
+  }
+  shops {
+    id
+    name
+  }
+}
+
+query BeerPage($beerId: ID!) {
+  beer(beerId: $beerId) {
+    ...SingleBeer
+  }
+}

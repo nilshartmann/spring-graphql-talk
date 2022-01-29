@@ -1,0 +1,515 @@
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
+/** All built-in and custom scalars, mapped to their actual values */
+export type Scalars = {
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
+};
+
+export type AddRatingInput = {
+  beerId: Scalars['ID'];
+  comment: Scalars['String'];
+  stars: Scalars['Int'];
+  userId: Scalars['ID'];
+};
+
+export type Address = {
+  __typename?: 'Address';
+  city: Scalars['String'];
+  country: Scalars['String'];
+  postalCode: Scalars['String'];
+  street: Scalars['String'];
+};
+
+export type Authentication = {
+  __typename?: 'Authentication';
+  authToken: Scalars['String'];
+  userId: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type Beer = {
+  __typename?: 'Beer';
+  averageStars: Scalars['Int'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  price: Scalars['String'];
+  ratings: Array<Rating>;
+  ratingsWithStars: Array<Rating>;
+  shops: Array<Shop>;
+};
+
+
+export type BeerRatingsWithStarsArgs = {
+  stars: Scalars['Int'];
+};
+
+export type Greeting = {
+  __typename?: 'Greeting';
+  greet: Scalars['String'];
+  msg: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  authentication?: Maybe<Authentication>;
+  error?: Maybe<Scalars['String']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addRating: Rating;
+  login: LoginResponse;
+  updateBeerName: Beer;
+};
+
+
+export type MutationAddRatingArgs = {
+  ratingInput?: InputMaybe<AddRatingInput>;
+};
+
+
+export type MutationLoginArgs = {
+  username: Scalars['String'];
+};
+
+
+export type MutationUpdateBeerNameArgs = {
+  beerId: Scalars['ID'];
+  newName: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  beer?: Maybe<Beer>;
+  beers: Array<Beer>;
+  hello: Greeting;
+  ping: Scalars['String'];
+  shop?: Maybe<Shop>;
+  shops: Array<Shop>;
+};
+
+
+export type QueryBeerArgs = {
+  beerId: Scalars['ID'];
+};
+
+
+export type QueryHelloArgs = {
+  msg: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
+export type QueryPingArgs = {
+  msg?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryShopArgs = {
+  shopId: Scalars['ID'];
+};
+
+export type Rating = {
+  __typename?: 'Rating';
+  author: User;
+  beer: Beer;
+  comment: Scalars['String'];
+  id: Scalars['ID'];
+  stars: Scalars['Int'];
+};
+
+export type Shop = {
+  __typename?: 'Shop';
+  address: Address;
+  beers: Array<Beer>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  newRatings: Rating;
+  onNewRating: Rating;
+};
+
+
+export type SubscriptionNewRatingsArgs = {
+  beerId: Scalars['ID'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  login: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type BeerRatingsFragment = { __typename?: 'Beer', id: string, ratings: Array<{ __typename?: 'Rating', id: string }> };
+
+export type AddRatingMutationVariables = Exact<{
+  input: AddRatingInput;
+}>;
+
+
+export type AddRatingMutation = { __typename?: 'Mutation', addRating: { __typename?: 'Rating', id: string, comment: string, stars: number, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } } };
+
+export type NewRatingSubscriptionVariables = Exact<{
+  beerId: Scalars['ID'];
+}>;
+
+
+export type NewRatingSubscription = { __typename?: 'Subscription', rating: { __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } } };
+
+export type SingleBeerFragment = { __typename?: 'Beer', id: string, name: string, price: string, ratings: Array<{ __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } }>, shops: Array<{ __typename?: 'Shop', id: string, name: string }> };
+
+export type BeerPageQueryVariables = Exact<{
+  beerId: Scalars['ID'];
+}>;
+
+
+export type BeerPageQuery = { __typename?: 'Query', beer?: { __typename?: 'Beer', id: string, name: string, price: string, ratings: Array<{ __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } }>, shops: Array<{ __typename?: 'Shop', id: string, name: string }> } | null | undefined };
+
+export type UpdateBeerNameMutationVariables = Exact<{
+  beerId: Scalars['ID'];
+  newName: Scalars['String'];
+}>;
+
+
+export type UpdateBeerNameMutation = { __typename?: 'Mutation', updatedBeer: { __typename?: 'Beer', id: string, name: string } };
+
+export type LoginMutationVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', error?: string | null | undefined, authentication?: { __typename?: 'Authentication', userId: string, username: string, authToken: string } | null | undefined } };
+
+export type OverviewPageQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OverviewPageQuery = { __typename?: 'Query', beers: Array<{ __typename?: 'Beer', id: string, name: string, averageStars: number }> };
+
+export type ShopFragment = { __typename?: 'Shop', id: string, name: string, address: { __typename?: 'Address', street: string, postalCode: string, city: string, country: string }, beers: Array<{ __typename?: 'Beer', id: string, name: string }> };
+
+export type ShopPageQueryVariables = Exact<{
+  shopId: Scalars['ID'];
+}>;
+
+
+export type ShopPageQuery = { __typename?: 'Query', shop?: { __typename?: 'Shop', id: string, name: string, address: { __typename?: 'Address', street: string, postalCode: string, city: string, country: string }, beers: Array<{ __typename?: 'Beer', id: string, name: string }> } | null | undefined };
+
+export const BeerRatingsFragmentDoc = gql`
+    fragment BeerRatings on Beer {
+  id
+  ratings {
+    id
+  }
+}
+    `;
+export const SingleBeerFragmentDoc = gql`
+    fragment SingleBeer on Beer {
+  id
+  name
+  price
+  ratings {
+    id
+    stars
+    beer {
+      id
+    }
+    author {
+      name
+    }
+    comment
+  }
+  shops {
+    id
+    name
+  }
+}
+    `;
+export const ShopFragmentDoc = gql`
+    fragment Shop on Shop {
+  id
+  name
+  address {
+    street
+    postalCode
+    city
+    country
+  }
+  beers {
+    id
+    name
+  }
+}
+    `;
+export const AddRatingDocument = gql`
+    mutation AddRating($input: AddRatingInput!) {
+  addRating(ratingInput: $input) {
+    id
+    beer {
+      id
+    }
+    author {
+      name
+    }
+    comment
+    stars
+  }
+}
+    `;
+export type AddRatingMutationFn = Apollo.MutationFunction<AddRatingMutation, AddRatingMutationVariables>;
+
+/**
+ * __useAddRatingMutation__
+ *
+ * To run a mutation, you first call `useAddRatingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddRatingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addRatingMutation, { data, loading, error }] = useAddRatingMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddRatingMutation(baseOptions?: Apollo.MutationHookOptions<AddRatingMutation, AddRatingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddRatingMutation, AddRatingMutationVariables>(AddRatingDocument, options);
+      }
+export type AddRatingMutationHookResult = ReturnType<typeof useAddRatingMutation>;
+export type AddRatingMutationResult = Apollo.MutationResult<AddRatingMutation>;
+export type AddRatingMutationOptions = Apollo.BaseMutationOptions<AddRatingMutation, AddRatingMutationVariables>;
+export const NewRatingDocument = gql`
+    subscription NewRating($beerId: ID!) {
+  rating: newRatings(beerId: $beerId) {
+    id
+    stars
+    beer {
+      id
+    }
+    author {
+      name
+    }
+    comment
+  }
+}
+    `;
+
+/**
+ * __useNewRatingSubscription__
+ *
+ * To run a query within a React component, call `useNewRatingSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewRatingSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewRatingSubscription({
+ *   variables: {
+ *      beerId: // value for 'beerId'
+ *   },
+ * });
+ */
+export function useNewRatingSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewRatingSubscription, NewRatingSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewRatingSubscription, NewRatingSubscriptionVariables>(NewRatingDocument, options);
+      }
+export type NewRatingSubscriptionHookResult = ReturnType<typeof useNewRatingSubscription>;
+export type NewRatingSubscriptionResult = Apollo.SubscriptionResult<NewRatingSubscription>;
+export const BeerPageDocument = gql`
+    query BeerPage($beerId: ID!) {
+  beer(beerId: $beerId) {
+    ...SingleBeer
+  }
+}
+    ${SingleBeerFragmentDoc}`;
+
+/**
+ * __useBeerPageQuery__
+ *
+ * To run a query within a React component, call `useBeerPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBeerPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBeerPageQuery({
+ *   variables: {
+ *      beerId: // value for 'beerId'
+ *   },
+ * });
+ */
+export function useBeerPageQuery(baseOptions: Apollo.QueryHookOptions<BeerPageQuery, BeerPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BeerPageQuery, BeerPageQueryVariables>(BeerPageDocument, options);
+      }
+export function useBeerPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BeerPageQuery, BeerPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BeerPageQuery, BeerPageQueryVariables>(BeerPageDocument, options);
+        }
+export type BeerPageQueryHookResult = ReturnType<typeof useBeerPageQuery>;
+export type BeerPageLazyQueryHookResult = ReturnType<typeof useBeerPageLazyQuery>;
+export type BeerPageQueryResult = Apollo.QueryResult<BeerPageQuery, BeerPageQueryVariables>;
+export const UpdateBeerNameDocument = gql`
+    mutation UpdateBeerName($beerId: ID!, $newName: String!) {
+  updatedBeer: updateBeerName(beerId: $beerId, newName: $newName) {
+    id
+    name
+  }
+}
+    `;
+export type UpdateBeerNameMutationFn = Apollo.MutationFunction<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>;
+
+/**
+ * __useUpdateBeerNameMutation__
+ *
+ * To run a mutation, you first call `useUpdateBeerNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBeerNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBeerNameMutation, { data, loading, error }] = useUpdateBeerNameMutation({
+ *   variables: {
+ *      beerId: // value for 'beerId'
+ *      newName: // value for 'newName'
+ *   },
+ * });
+ */
+export function useUpdateBeerNameMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>(UpdateBeerNameDocument, options);
+      }
+export type UpdateBeerNameMutationHookResult = ReturnType<typeof useUpdateBeerNameMutation>;
+export type UpdateBeerNameMutationResult = Apollo.MutationResult<UpdateBeerNameMutation>;
+export type UpdateBeerNameMutationOptions = Apollo.BaseMutationOptions<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($username: String!) {
+  login(username: $username) {
+    authentication {
+      userId
+      username
+      authToken
+    }
+    error
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const OverviewPageDocument = gql`
+    query OverviewPage {
+  beers {
+    id
+    name
+    averageStars
+  }
+}
+    `;
+
+/**
+ * __useOverviewPageQuery__
+ *
+ * To run a query within a React component, call `useOverviewPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOverviewPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOverviewPageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOverviewPageQuery(baseOptions?: Apollo.QueryHookOptions<OverviewPageQuery, OverviewPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OverviewPageQuery, OverviewPageQueryVariables>(OverviewPageDocument, options);
+      }
+export function useOverviewPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OverviewPageQuery, OverviewPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OverviewPageQuery, OverviewPageQueryVariables>(OverviewPageDocument, options);
+        }
+export type OverviewPageQueryHookResult = ReturnType<typeof useOverviewPageQuery>;
+export type OverviewPageLazyQueryHookResult = ReturnType<typeof useOverviewPageLazyQuery>;
+export type OverviewPageQueryResult = Apollo.QueryResult<OverviewPageQuery, OverviewPageQueryVariables>;
+export const ShopPageDocument = gql`
+    query ShopPage($shopId: ID!) {
+  shop(shopId: $shopId) {
+    ...Shop
+  }
+}
+    ${ShopFragmentDoc}`;
+
+/**
+ * __useShopPageQuery__
+ *
+ * To run a query within a React component, call `useShopPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useShopPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useShopPageQuery({
+ *   variables: {
+ *      shopId: // value for 'shopId'
+ *   },
+ * });
+ */
+export function useShopPageQuery(baseOptions: Apollo.QueryHookOptions<ShopPageQuery, ShopPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ShopPageQuery, ShopPageQueryVariables>(ShopPageDocument, options);
+      }
+export function useShopPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShopPageQuery, ShopPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ShopPageQuery, ShopPageQueryVariables>(ShopPageDocument, options);
+        }
+export type ShopPageQueryHookResult = ReturnType<typeof useShopPageQuery>;
+export type ShopPageLazyQueryHookResult = ReturnType<typeof useShopPageLazyQuery>;
+export type ShopPageQueryResult = Apollo.QueryResult<ShopPageQuery, ShopPageQueryVariables>;

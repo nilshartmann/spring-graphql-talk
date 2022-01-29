@@ -7,3 +7,5 @@ package.json
 
 .fonts/fonts.css
 __generated__/
+
+ src/generated/graphql.tsx

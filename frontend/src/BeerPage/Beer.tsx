@@ -1,8 +1,10 @@
 import React from "react";
 import AddRating from "./AddRating";
 import styles from "./Beer.module.css";
-import { BeerPageQuery_beer as BeerData, BeerPageQuery_beer_shops as ShopData } from "./querytypes/BeerPageQuery";
 import Rating from "./Rating";
+import { SingleBeerFragment } from "../generated/graphql";
+
+type ShopData = SingleBeerFragment["shops"][0];
 
 type ShopProps = {
   shop: ShopData;
@@ -17,7 +19,7 @@ const Shop = ({ shop: { id, name }, onShopClicked }: ShopProps) => (
 
 export type SubscribeToMoreFnResult = () => void;
 type BeerProps = {
-  beer: BeerData;
+  beer: SingleBeerFragment;
   subscribeToNewData(): SubscribeToMoreFnResult;
   onShopClicked: (newCurrentShopId: string) => void;
 };

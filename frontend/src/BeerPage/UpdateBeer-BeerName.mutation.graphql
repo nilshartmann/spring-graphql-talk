@@ -1,0 +1,6 @@
+mutation UpdateBeerName($beerId: ID!, $newName: String!) {
+  updatedBeer: updateBeerName(beerId: $beerId, newName: $newName) {
+    id
+    name
+  }
+}

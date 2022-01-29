@@ -1,8 +1,6 @@
-import { useMutation } from "@apollo/client";
-import gql from "graphql-tag";
-import { LoginMutation, LoginMutationVariables } from "querytypes/LoginMutation";
 import * as React from "react";
 import { assertValidData, AuthErrorState, AuthInfoState } from "types";
+import { useLoginMutation } from "./generated/graphql";
 
 interface IAuthContext {
   auth: AuthInfoState | AuthErrorState | null;
@@ -22,51 +20,21 @@ interface AuthProviderState {
   auth: AuthInfoState | AuthErrorState | null;
 }
 
-const LOGIN_MUTATION = gql`
-  mutation LoginMutation($username: String!) {
-    login(username: $username) {
-      authentication {
-        userId
-        username
-        authToken
-      }
-      error
-    }
-  }
-`;
-
-function useLoginMutation() {
-  const [login] = useMutation<LoginMutation, LoginMutationVariables>(LOGIN_MUTATION);
-
-  const doLogin = React.useCallback(
-    (loginId: string) => {
-      return login({
-        variables: {
-          username: loginId,
-        },
-      });
-    },
-    [login]
-  );
-
-  return doLogin;
-}
-
 type AuthProviderProps = {
   children: React.ReactElement;
 };
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const loginMutation = useLoginMutation();
+  const [loginMutation] = useLoginMutation();
   const [authState, setAuthState] = React.useState<AuthProviderState>({
     auth: null,
   });
 
   const login = React.useCallback(
-    async function login(loginId: string) {
+    async function login(username: string) {
       setAuthToken(null);
 
-      const loginResult = await loginMutation(loginId);
+      const loginResult = await loginMutation({ variables: { username } });
       if (!loginResult.data) {
         setAuthState({
           auth: {

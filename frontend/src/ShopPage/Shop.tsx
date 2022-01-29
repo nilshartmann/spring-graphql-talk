@@ -1,9 +1,9 @@
 import React from "react";
-import { ShopPageQuery_shop, ShopPageQuery_shop_address } from "./querytypes/ShopPageQuery";
 import styles from "./ShopPage.module.css";
+import { ShopFragment } from "../generated/graphql";
 
 type ShopProps = {
-  shop: ShopPageQuery_shop;
+  shop: ShopFragment;
   onBeerClick(beerId: string): void;
 };
 
@@ -32,7 +32,7 @@ export default function Shop({ shop, onBeerClick }: ShopProps) {
   );
 }
 
-type WhereToFindProps = { address: ShopPageQuery_shop_address };
+type WhereToFindProps = { address: ShopFragment["address"] };
 function WhereToFind({ address }: WhereToFindProps) {
   return (
     <div style={{ marginRight: "50px" }}>

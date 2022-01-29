@@ -1,10 +1,10 @@
 import * as React from "react";
 import Stars from "../components";
 import styles from "./Beer.module.css";
-import { BeerPageQuery_beer_ratings as BeerRatingData } from "./querytypes/BeerPageQuery";
+import { SingleBeerFragment } from "../generated/graphql";
 
 interface RatingProps {
-  rating: BeerRatingData;
+  rating: SingleBeerFragment["ratings"][0];
 }
 
 const Rating = ({ rating: { author, comment, stars } }: RatingProps) => (
