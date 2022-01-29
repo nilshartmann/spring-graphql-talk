@@ -28,7 +28,9 @@ public class UserController {
 
         logger.info("Finding users with ids '{}'", Arrays.asList(userIds));
 
-        return userRepository.findUsersWithId(userIds);
+      List<User> result = userRepository.findUsersWithId(userIds);
+      logger.info("Result ({}): {}", result.size(), result);
+      return result;
     }
 
     @GetMapping(value = "/login/{login}")

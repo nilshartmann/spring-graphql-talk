@@ -1,7 +1,6 @@
 package nh.graphql.beeradvisor.auth;
 
 import nh.graphql.beeradvisor.Utils;
-import nh.graphql.beeradvisor.domain.Shop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +9,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -19,42 +20,43 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+  private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    private final String userServiceUrl;
-    private final RestTemplate restTemplate;
+  private final String userServiceUrl;
+  private final RestTemplate restTemplate;
+  private final WebClient webClient;
 
-    public UserService(RestTemplate restTemplate, @Value("${beeradvisor.userservice.url}") String url) {
-        this.userServiceUrl = url;
-        this.restTemplate = restTemplate;
-    }
+  public UserService(RestTemplate restTemplate, @Value("${beeradvisor.userservice.url}") String url) {
+    this.userServiceUrl = url;
+    this.restTemplate = restTemplate;
+    this.webClient = WebClient.builder().baseUrl(userServiceUrl).build();
+  }
 
-    public User getUser(String userId) {
-        List<String> userIds = Utils.listOf(userId);
+  public User getUser(String userId) {
+    List<String> userIds = Utils.listOf(userId);
 
-        List<User> users = findUsersWithId(userIds);
+    User user = findUsersWithIds(userIds).blockFirst();
 
-        if (users.isEmpty()) {
-            return null;
-        }
+    return user;
+  }
+  public Flux<User> findUsersWithIds(List<String> userIds) {
+    logger.debug("Loading users with Ids '{}'", userIds);
 
-        return users.get(0);
-    }
+    var result = webClient.get()
+      .uri(uriBuilder -> uriBuilder
+        .path("/users/{userIds}")
+        .build(String.join(",", userIds)))
+      .retrieve().bodyToFlux(User.class)
+      .doFirst(() -> logger.info("Requesting users with ids '{}'!", userIds))
+      .doOnNext(x -> logger.info("Retrieved Result for user ids '{}: {}'!", userIds, x));
 
-    public List<User> findUsersWithId(List<String> userIds) {
+    return result;
+  }
 
-        logger.info("requesting users with Ids '{}' from '{}'", userIds, userServiceUrl);
 
-        ResponseEntity<List<User>> response = restTemplate.exchange(this.userServiceUrl + "/users/{userIds}", HttpMethod.GET,
-            null, new ParameterizedTypeReference<List<User>>() {
-            }, String.join(",", userIds));
-        List<User> users = response.getBody();
-        return users;
-    }
-
-    public User getUserByLogin(String userName) {
-        logger.info("login with userName '{}' from '{}'", userName, userServiceUrl);
-        User user = restTemplate.getForObject(this.userServiceUrl + "/login/{userName}", User.class, userName);
-        return user;
-    }
+  public User getUserByLogin(String userName) {
+    logger.info("login with userName '{}' from '{}'", userName, userServiceUrl);
+    User user = restTemplate.getForObject(this.userServiceUrl + "/login/{userName}", User.class, userName);
+    return user;
+  }
 }

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * Represents a Rating for a single beer given by a single Author
@@ -60,11 +61,23 @@ public class Rating {
   }
 
   public String getUserId() {
-    logger.info("Returning user id as author " + userId);
     return this.userId;
   }
 
   public int getStars() {
     return stars;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Rating rating = (Rating) o;
+    return id.equals(rating.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
