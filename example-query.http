@@ -1,0 +1,7 @@
+POST http://localhost:9000/graphql
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+  "query": "query iNeedBeers { beers { name } }"
+}
