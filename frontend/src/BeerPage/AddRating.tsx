@@ -1,6 +1,5 @@
-import { useMutation, DataProxy } from "@apollo/client";
+import { DataProxy } from "@apollo/client";
 import { useAuthContext } from "AuthContext";
-import gql from "graphql-tag";
 import * as React from "react";
 import { assertValidAuth, NewRating } from "types";
 import LoginForm from "./LoginForm";

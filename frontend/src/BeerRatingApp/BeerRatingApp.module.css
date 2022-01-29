@@ -6,7 +6,8 @@
   --color-background-rgb: 255, 253, 249;
   --font-text: AnonymousPro-Bold;
 }
-:global body, :global html {
+:global body,
+:global html {
   font-family: Anonymous Pro;
   color: var(--color-text);
   background-color: #f2f2f2;

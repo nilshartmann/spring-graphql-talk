@@ -1,11 +1,11 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -16,260 +16,313 @@ export type Scalars = {
 };
 
 export type AddRatingInput = {
-  beerId: Scalars['ID'];
-  comment: Scalars['String'];
-  stars: Scalars['Int'];
-  userId: Scalars['ID'];
+  beerId: Scalars["ID"];
+  comment: Scalars["String"];
+  stars: Scalars["Int"];
+  userId: Scalars["ID"];
 };
 
 export type Address = {
-  __typename?: 'Address';
-  city: Scalars['String'];
-  country: Scalars['String'];
-  postalCode: Scalars['String'];
-  street: Scalars['String'];
+  __typename?: "Address";
+  city: Scalars["String"];
+  country: Scalars["String"];
+  postalCode: Scalars["String"];
+  street: Scalars["String"];
 };
 
 export type Authentication = {
-  __typename?: 'Authentication';
-  authToken: Scalars['String'];
-  userId: Scalars['String'];
-  username: Scalars['String'];
+  __typename?: "Authentication";
+  authToken: Scalars["String"];
+  userId: Scalars["String"];
+  username: Scalars["String"];
 };
 
 export type Beer = {
-  __typename?: 'Beer';
-  averageStars: Scalars['Int'];
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  price: Scalars['String'];
+  __typename?: "Beer";
+  averageStars: Scalars["Int"];
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  price: Scalars["String"];
   ratings: Array<Rating>;
   ratingsWithStars: Array<Rating>;
   shops: Array<Shop>;
 };
 
-
 export type BeerRatingsWithStarsArgs = {
-  stars: Scalars['Int'];
-};
-
-export type Greeting = {
-  __typename?: 'Greeting';
-  greet: Scalars['String'];
-  msg: Scalars['String'];
-  name: Scalars['String'];
+  stars: Scalars["Int"];
 };
 
 export type LoginResponse = {
-  __typename?: 'LoginResponse';
+  __typename?: "LoginResponse";
   authentication?: Maybe<Authentication>;
-  error?: Maybe<Scalars['String']>;
+  error?: Maybe<Scalars["String"]>;
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+  __typename?: "Mutation";
   addRating: Rating;
   login: LoginResponse;
   updateBeerName: Beer;
 };
 
-
 export type MutationAddRatingArgs = {
   ratingInput?: InputMaybe<AddRatingInput>;
 };
 
-
 export type MutationLoginArgs = {
-  username: Scalars['String'];
+  username: Scalars["String"];
 };
 
-
 export type MutationUpdateBeerNameArgs = {
-  beerId: Scalars['ID'];
-  newName: Scalars['String'];
+  beerId: Scalars["ID"];
+  newName: Scalars["String"];
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename?: "Query";
   beer?: Maybe<Beer>;
   beers: Array<Beer>;
-  hello: Greeting;
-  ping: Scalars['String'];
+  ping: Scalars["String"];
   shop?: Maybe<Shop>;
   shops: Array<Shop>;
 };
 
-
 export type QueryBeerArgs = {
-  beerId: Scalars['ID'];
+  beerId: Scalars["ID"];
 };
-
-
-export type QueryHelloArgs = {
-  msg: Scalars['String'];
-  name: Scalars['String'];
-};
-
 
 export type QueryPingArgs = {
-  msg?: InputMaybe<Scalars['String']>;
+  msg?: InputMaybe<Scalars["String"]>;
 };
 
-
 export type QueryShopArgs = {
-  shopId: Scalars['ID'];
+  shopId: Scalars["ID"];
 };
 
 export type Rating = {
-  __typename?: 'Rating';
+  __typename?: "Rating";
   author: User;
   beer: Beer;
-  comment: Scalars['String'];
-  id: Scalars['ID'];
-  stars: Scalars['Int'];
+  comment: Scalars["String"];
+  id: Scalars["ID"];
+  stars: Scalars["Int"];
 };
 
 export type Shop = {
-  __typename?: 'Shop';
+  __typename?: "Shop";
   address: Address;
   beers: Array<Beer>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  id: Scalars["ID"];
+  name: Scalars["String"];
 };
 
 export type Subscription = {
-  __typename?: 'Subscription';
+  __typename?: "Subscription";
   newRatings: Rating;
   onNewRating: Rating;
 };
 
-
 export type SubscriptionNewRatingsArgs = {
-  beerId: Scalars['ID'];
+  beerId: Scalars["ID"];
 };
 
 export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  login: Scalars['String'];
-  name: Scalars['String'];
+  __typename?: "User";
+  id: Scalars["ID"];
+  login: Scalars["String"];
+  name: Scalars["String"];
 };
 
-export type BeerRatingsFragment = { __typename?: 'Beer', id: string, ratings: Array<{ __typename?: 'Rating', id: string }> };
+export type BeerRatingsFragment = { __typename?: "Beer"; id: string; ratings: Array<{ __typename?: "Rating"; id: string }> };
 
 export type AddRatingMutationVariables = Exact<{
   input: AddRatingInput;
 }>;
 
-
-export type AddRatingMutation = { __typename?: 'Mutation', addRating: { __typename?: 'Rating', id: string, comment: string, stars: number, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } } };
+export type AddRatingMutation = {
+  __typename?: "Mutation";
+  addRating: {
+    __typename?: "Rating";
+    id: string;
+    comment: string;
+    stars: number;
+    beer: { __typename?: "Beer"; id: string };
+    author: { __typename?: "User"; name: string };
+  };
+};
 
 export type NewRatingSubscriptionVariables = Exact<{
-  beerId: Scalars['ID'];
+  beerId: Scalars["ID"];
 }>;
 
+export type NewRatingSubscription = {
+  __typename?: "Subscription";
+  rating: {
+    __typename?: "Rating";
+    id: string;
+    stars: number;
+    comment: string;
+    beer: { __typename?: "Beer"; id: string };
+    author: { __typename?: "User"; name: string };
+  };
+};
 
-export type NewRatingSubscription = { __typename?: 'Subscription', rating: { __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } } };
-
-export type SingleBeerFragment = { __typename?: 'Beer', id: string, name: string, price: string, ratings: Array<{ __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } }>, shops: Array<{ __typename?: 'Shop', id: string, name: string }> };
+export type SingleBeerFragment = {
+  __typename?: "Beer";
+  id: string;
+  name: string;
+  price: string;
+  ratings: Array<{
+    __typename?: "Rating";
+    id: string;
+    stars: number;
+    comment: string;
+    beer: { __typename?: "Beer"; id: string };
+    author: { __typename?: "User"; name: string };
+  }>;
+  shops: Array<{ __typename?: "Shop"; id: string; name: string }>;
+};
 
 export type BeerPageQueryVariables = Exact<{
-  beerId: Scalars['ID'];
+  beerId: Scalars["ID"];
 }>;
 
-
-export type BeerPageQuery = { __typename?: 'Query', beer?: { __typename?: 'Beer', id: string, name: string, price: string, ratings: Array<{ __typename?: 'Rating', id: string, stars: number, comment: string, beer: { __typename?: 'Beer', id: string }, author: { __typename?: 'User', name: string } }>, shops: Array<{ __typename?: 'Shop', id: string, name: string }> } | null | undefined };
+export type BeerPageQuery = {
+  __typename?: "Query";
+  beer?:
+    | {
+        __typename?: "Beer";
+        id: string;
+        name: string;
+        price: string;
+        ratings: Array<{
+          __typename?: "Rating";
+          id: string;
+          stars: number;
+          comment: string;
+          beer: { __typename?: "Beer"; id: string };
+          author: { __typename?: "User"; name: string };
+        }>;
+        shops: Array<{ __typename?: "Shop"; id: string; name: string }>;
+      }
+    | null
+    | undefined;
+};
 
 export type UpdateBeerNameMutationVariables = Exact<{
-  beerId: Scalars['ID'];
-  newName: Scalars['String'];
+  beerId: Scalars["ID"];
+  newName: Scalars["String"];
 }>;
 
-
-export type UpdateBeerNameMutation = { __typename?: 'Mutation', updatedBeer: { __typename?: 'Beer', id: string, name: string } };
+export type UpdateBeerNameMutation = { __typename?: "Mutation"; updatedBeer: { __typename?: "Beer"; id: string; name: string } };
 
 export type LoginMutationVariables = Exact<{
-  username: Scalars['String'];
+  username: Scalars["String"];
 }>;
 
+export type LoginMutation = {
+  __typename?: "Mutation";
+  login: {
+    __typename?: "LoginResponse";
+    error?: string | null | undefined;
+    authentication?: { __typename?: "Authentication"; userId: string; username: string; authToken: string } | null | undefined;
+  };
+};
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', error?: string | null | undefined, authentication?: { __typename?: 'Authentication', userId: string, username: string, authToken: string } | null | undefined } };
+export type OverviewPageQueryVariables = Exact<{ [key: string]: never }>;
 
-export type OverviewPageQueryVariables = Exact<{ [key: string]: never; }>;
+export type OverviewPageQuery = {
+  __typename?: "Query";
+  beers: Array<{ __typename?: "Beer"; id: string; name: string; averageStars: number }>;
+};
 
-
-export type OverviewPageQuery = { __typename?: 'Query', beers: Array<{ __typename?: 'Beer', id: string, name: string, averageStars: number }> };
-
-export type ShopFragment = { __typename?: 'Shop', id: string, name: string, address: { __typename?: 'Address', street: string, postalCode: string, city: string, country: string }, beers: Array<{ __typename?: 'Beer', id: string, name: string }> };
+export type ShopFragment = {
+  __typename?: "Shop";
+  id: string;
+  name: string;
+  address: { __typename?: "Address"; street: string; postalCode: string; city: string; country: string };
+  beers: Array<{ __typename?: "Beer"; id: string; name: string }>;
+};
 
 export type ShopPageQueryVariables = Exact<{
-  shopId: Scalars['ID'];
+  shopId: Scalars["ID"];
 }>;
 
-
-export type ShopPageQuery = { __typename?: 'Query', shop?: { __typename?: 'Shop', id: string, name: string, address: { __typename?: 'Address', street: string, postalCode: string, city: string, country: string }, beers: Array<{ __typename?: 'Beer', id: string, name: string }> } | null | undefined };
+export type ShopPageQuery = {
+  __typename?: "Query";
+  shop?:
+    | {
+        __typename?: "Shop";
+        id: string;
+        name: string;
+        address: { __typename?: "Address"; street: string; postalCode: string; city: string; country: string };
+        beers: Array<{ __typename?: "Beer"; id: string; name: string }>;
+      }
+    | null
+    | undefined;
+};
 
 export const BeerRatingsFragmentDoc = gql`
-    fragment BeerRatings on Beer {
-  id
-  ratings {
+  fragment BeerRatings on Beer {
     id
+    ratings {
+      id
+    }
   }
-}
-    `;
+`;
 export const SingleBeerFragmentDoc = gql`
-    fragment SingleBeer on Beer {
-  id
-  name
-  price
-  ratings {
-    id
-    stars
-    beer {
-      id
-    }
-    author {
-      name
-    }
-    comment
-  }
-  shops {
+  fragment SingleBeer on Beer {
     id
     name
+    price
+    ratings {
+      id
+      stars
+      beer {
+        id
+      }
+      author {
+        name
+      }
+      comment
+    }
+    shops {
+      id
+      name
+    }
   }
-}
-    `;
+`;
 export const ShopFragmentDoc = gql`
-    fragment Shop on Shop {
-  id
-  name
-  address {
-    street
-    postalCode
-    city
-    country
-  }
-  beers {
+  fragment Shop on Shop {
     id
     name
-  }
-}
-    `;
-export const AddRatingDocument = gql`
-    mutation AddRating($input: AddRatingInput!) {
-  addRating(ratingInput: $input) {
-    id
-    beer {
-      id
+    address {
+      street
+      postalCode
+      city
+      country
     }
-    author {
+    beers {
+      id
       name
     }
-    comment
-    stars
   }
-}
-    `;
+`;
+export const AddRatingDocument = gql`
+  mutation AddRating($input: AddRatingInput!) {
+    addRating(ratingInput: $input) {
+      id
+      beer {
+        id
+      }
+      author {
+        name
+      }
+      comment
+      stars
+    }
+  }
+`;
 export type AddRatingMutationFn = Apollo.MutationFunction<AddRatingMutation, AddRatingMutationVariables>;
 
 /**
@@ -290,27 +343,27 @@ export type AddRatingMutationFn = Apollo.MutationFunction<AddRatingMutation, Add
  * });
  */
 export function useAddRatingMutation(baseOptions?: Apollo.MutationHookOptions<AddRatingMutation, AddRatingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddRatingMutation, AddRatingMutationVariables>(AddRatingDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AddRatingMutation, AddRatingMutationVariables>(AddRatingDocument, options);
+}
 export type AddRatingMutationHookResult = ReturnType<typeof useAddRatingMutation>;
 export type AddRatingMutationResult = Apollo.MutationResult<AddRatingMutation>;
 export type AddRatingMutationOptions = Apollo.BaseMutationOptions<AddRatingMutation, AddRatingMutationVariables>;
 export const NewRatingDocument = gql`
-    subscription NewRating($beerId: ID!) {
-  rating: newRatings(beerId: $beerId) {
-    id
-    stars
-    beer {
+  subscription NewRating($beerId: ID!) {
+    rating: newRatings(beerId: $beerId) {
       id
+      stars
+      beer {
+        id
+      }
+      author {
+        name
+      }
+      comment
     }
-    author {
-      name
-    }
-    comment
   }
-}
-    `;
+`;
 
 /**
  * __useNewRatingSubscription__
@@ -328,19 +381,22 @@ export const NewRatingDocument = gql`
  *   },
  * });
  */
-export function useNewRatingSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewRatingSubscription, NewRatingSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<NewRatingSubscription, NewRatingSubscriptionVariables>(NewRatingDocument, options);
-      }
+export function useNewRatingSubscription(
+  baseOptions: Apollo.SubscriptionHookOptions<NewRatingSubscription, NewRatingSubscriptionVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSubscription<NewRatingSubscription, NewRatingSubscriptionVariables>(NewRatingDocument, options);
+}
 export type NewRatingSubscriptionHookResult = ReturnType<typeof useNewRatingSubscription>;
 export type NewRatingSubscriptionResult = Apollo.SubscriptionResult<NewRatingSubscription>;
 export const BeerPageDocument = gql`
-    query BeerPage($beerId: ID!) {
-  beer(beerId: $beerId) {
-    ...SingleBeer
+  query BeerPage($beerId: ID!) {
+    beer(beerId: $beerId) {
+      ...SingleBeer
+    }
   }
-}
-    ${SingleBeerFragmentDoc}`;
+  ${SingleBeerFragmentDoc}
+`;
 
 /**
  * __useBeerPageQuery__
@@ -359,24 +415,24 @@ export const BeerPageDocument = gql`
  * });
  */
 export function useBeerPageQuery(baseOptions: Apollo.QueryHookOptions<BeerPageQuery, BeerPageQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BeerPageQuery, BeerPageQueryVariables>(BeerPageDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<BeerPageQuery, BeerPageQueryVariables>(BeerPageDocument, options);
+}
 export function useBeerPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BeerPageQuery, BeerPageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BeerPageQuery, BeerPageQueryVariables>(BeerPageDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<BeerPageQuery, BeerPageQueryVariables>(BeerPageDocument, options);
+}
 export type BeerPageQueryHookResult = ReturnType<typeof useBeerPageQuery>;
 export type BeerPageLazyQueryHookResult = ReturnType<typeof useBeerPageLazyQuery>;
 export type BeerPageQueryResult = Apollo.QueryResult<BeerPageQuery, BeerPageQueryVariables>;
 export const UpdateBeerNameDocument = gql`
-    mutation UpdateBeerName($beerId: ID!, $newName: String!) {
-  updatedBeer: updateBeerName(beerId: $beerId, newName: $newName) {
-    id
-    name
+  mutation UpdateBeerName($beerId: ID!, $newName: String!) {
+    updatedBeer: updateBeerName(beerId: $beerId, newName: $newName) {
+      id
+      name
+    }
   }
-}
-    `;
+`;
 export type UpdateBeerNameMutationFn = Apollo.MutationFunction<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>;
 
 /**
@@ -397,25 +453,27 @@ export type UpdateBeerNameMutationFn = Apollo.MutationFunction<UpdateBeerNameMut
  *   },
  * });
  */
-export function useUpdateBeerNameMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>(UpdateBeerNameDocument, options);
-      }
+export function useUpdateBeerNameMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>(UpdateBeerNameDocument, options);
+}
 export type UpdateBeerNameMutationHookResult = ReturnType<typeof useUpdateBeerNameMutation>;
 export type UpdateBeerNameMutationResult = Apollo.MutationResult<UpdateBeerNameMutation>;
 export type UpdateBeerNameMutationOptions = Apollo.BaseMutationOptions<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>;
 export const LoginDocument = gql`
-    mutation Login($username: String!) {
-  login(username: $username) {
-    authentication {
-      userId
-      username
-      authToken
+  mutation Login($username: String!) {
+    login(username: $username) {
+      authentication {
+        userId
+        username
+        authToken
+      }
+      error
     }
-    error
   }
-}
-    `;
+`;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -436,21 +494,21 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * });
  */
 export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+}
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const OverviewPageDocument = gql`
-    query OverviewPage {
-  beers {
-    id
-    name
-    averageStars
+  query OverviewPage {
+    beers {
+      id
+      name
+      averageStars
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useOverviewPageQuery__
@@ -468,23 +526,26 @@ export const OverviewPageDocument = gql`
  * });
  */
 export function useOverviewPageQuery(baseOptions?: Apollo.QueryHookOptions<OverviewPageQuery, OverviewPageQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OverviewPageQuery, OverviewPageQueryVariables>(OverviewPageDocument, options);
-      }
-export function useOverviewPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OverviewPageQuery, OverviewPageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OverviewPageQuery, OverviewPageQueryVariables>(OverviewPageDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OverviewPageQuery, OverviewPageQueryVariables>(OverviewPageDocument, options);
+}
+export function useOverviewPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<OverviewPageQuery, OverviewPageQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OverviewPageQuery, OverviewPageQueryVariables>(OverviewPageDocument, options);
+}
 export type OverviewPageQueryHookResult = ReturnType<typeof useOverviewPageQuery>;
 export type OverviewPageLazyQueryHookResult = ReturnType<typeof useOverviewPageLazyQuery>;
 export type OverviewPageQueryResult = Apollo.QueryResult<OverviewPageQuery, OverviewPageQueryVariables>;
 export const ShopPageDocument = gql`
-    query ShopPage($shopId: ID!) {
-  shop(shopId: $shopId) {
-    ...Shop
+  query ShopPage($shopId: ID!) {
+    shop(shopId: $shopId) {
+      ...Shop
+    }
   }
-}
-    ${ShopFragmentDoc}`;
+  ${ShopFragmentDoc}
+`;
 
 /**
  * __useShopPageQuery__
@@ -503,13 +564,13 @@ export const ShopPageDocument = gql`
  * });
  */
 export function useShopPageQuery(baseOptions: Apollo.QueryHookOptions<ShopPageQuery, ShopPageQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ShopPageQuery, ShopPageQueryVariables>(ShopPageDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ShopPageQuery, ShopPageQueryVariables>(ShopPageDocument, options);
+}
 export function useShopPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShopPageQuery, ShopPageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ShopPageQuery, ShopPageQueryVariables>(ShopPageDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ShopPageQuery, ShopPageQueryVariables>(ShopPageDocument, options);
+}
 export type ShopPageQueryHookResult = ReturnType<typeof useShopPageQuery>;
 export type ShopPageLazyQueryHookResult = ReturnType<typeof useShopPageLazyQuery>;
 export type ShopPageQueryResult = Apollo.QueryResult<ShopPageQuery, ShopPageQueryVariables>;
