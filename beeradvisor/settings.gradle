@@ -14,5 +14,5 @@ pluginManagement {
   }
 }
 
-rootProject.name = 'spring-graphql-talk'
+rootProject.name = 'beeradvisor'
 include 'backend', 'userservice', 'frontend'
