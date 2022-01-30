@@ -1,0 +1,10 @@
+
+# Define Beer with:
+#  - name, price, averageStars, ratings
+
+type Beer {
+    id: ID!
+}
+
+# Add Query fields:
+#  - beers, beer(beerId)

@@ -19,28 +19,16 @@ import java.util.List;
 public class BeerAdvisorController {
   private final Logger logger = LoggerFactory.getLogger(BeerAdvisorController.class);
 
-  private final BeerRepository beerRepository;
   private final BeerService beerService;
   private final ShopRepository shopRepository;
   private final RatingService ratingService;
   private final RatingPublisher ratingPublisher;
 
-  public BeerAdvisorController(BeerRepository beerRepository, BeerService beerService, ShopRepository shopRepository, RatingService ratingService, RatingPublisher ratingPublisher) {
-    this.beerRepository = beerRepository;
+  public BeerAdvisorController(BeerService beerService, ShopRepository shopRepository, RatingService ratingService, RatingPublisher ratingPublisher) {
     this.beerService = beerService;
     this.shopRepository = shopRepository;
     this.ratingService = ratingService;
     this.ratingPublisher = ratingPublisher;
-  }
-
-  @QueryMapping
-  public Beer beer(@Argument String beerId) {
-    return beerRepository.getBeer(beerId);
-  }
-
-  @QueryMapping
-  public List<Beer> beers() {
-    return beerRepository.findAll();
   }
 
   @MutationMapping

@@ -25,34 +25,7 @@ type Rating {
   stars: Int!
 }
 
-"""Representation of a Beer that has been rated"""
-type Beer {
-  """Unique, immutable Id, that identifies this Beer"""
-  id: ID!
-
-  """The name of the beer"""
-  name: String!
-
-  """The Beer's price"""
-  price: String!
-
-  """List of all Ratings for this Beer"""
-  ratings: [Rating!]!
-
-  """Average Rating of this Beer"""
-  averageStars: Int!
-
-  """List of Ratings that has at exactly 'stars' Stars"""
-  ratingsWithStars(stars: Int!): [Rating!]!
-}
-
 type Query {
-  """Returns a specific `Beer`, identified by its `id`, or `null` if not found"""
-  beer(beerId: ID!): Beer
-
-  """Returns a list of all `Beer` objects that we have in our system"""
-  beers: [Beer!]!
-
   ping(msg: String): String!
 }
 
