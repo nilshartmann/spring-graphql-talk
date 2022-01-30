@@ -1,0 +1,11 @@
+query ShopList {
+  shops {
+    id
+    name
+    address {
+      city
+      postalCode
+      street
+    }
+  }
+}

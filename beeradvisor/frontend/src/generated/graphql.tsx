@@ -317,6 +317,38 @@ export type OverviewPageQuery = (
   )> }
 );
 
+export type ShopQueryVariables = Exact<{
+  shopId: Scalars['ID'];
+}>;
+
+
+export type ShopQuery = (
+  { __typename?: 'Query' }
+  & { shop?: Maybe<(
+    { __typename?: 'Shop' }
+    & Pick<Shop, 'name'>
+    & { beers: Array<(
+      { __typename?: 'Beer' }
+      & Pick<Beer, 'name'>
+    )> }
+  )> }
+);
+
+export type ShopListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ShopListQuery = (
+  { __typename?: 'Query' }
+  & { shops: Array<(
+    { __typename?: 'Shop' }
+    & Pick<Shop, 'id' | 'name'>
+    & { address: (
+      { __typename?: 'Address' }
+      & Pick<Address, 'city' | 'postalCode' | 'street'>
+    ) }
+  )> }
+);
+
 export type ShopFragment = (
   { __typename?: 'Shop' }
   & Pick<Shop, 'id' | 'name'>
@@ -618,6 +650,84 @@ export function useOverviewPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type OverviewPageQueryHookResult = ReturnType<typeof useOverviewPageQuery>;
 export type OverviewPageLazyQueryHookResult = ReturnType<typeof useOverviewPageLazyQuery>;
 export type OverviewPageQueryResult = Apollo.QueryResult<OverviewPageQuery, OverviewPageQueryVariables>;
+export const ShopDocument = gql`
+    query Shop($shopId: ID!) {
+  shop(shopId: $shopId) {
+    name
+    beers {
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useShopQuery__
+ *
+ * To run a query within a React component, call `useShopQuery` and pass it any options that fit your needs.
+ * When your component renders, `useShopQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useShopQuery({
+ *   variables: {
+ *      shopId: // value for 'shopId'
+ *   },
+ * });
+ */
+export function useShopQuery(baseOptions: Apollo.QueryHookOptions<ShopQuery, ShopQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ShopQuery, ShopQueryVariables>(ShopDocument, options);
+      }
+export function useShopLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShopQuery, ShopQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ShopQuery, ShopQueryVariables>(ShopDocument, options);
+        }
+export type ShopQueryHookResult = ReturnType<typeof useShopQuery>;
+export type ShopLazyQueryHookResult = ReturnType<typeof useShopLazyQuery>;
+export type ShopQueryResult = Apollo.QueryResult<ShopQuery, ShopQueryVariables>;
+export const ShopListDocument = gql`
+    query ShopList {
+  shops {
+    id
+    name
+    address {
+      city
+      postalCode
+      street
+    }
+  }
+}
+    `;
+
+/**
+ * __useShopListQuery__
+ *
+ * To run a query within a React component, call `useShopListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useShopListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useShopListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useShopListQuery(baseOptions?: Apollo.QueryHookOptions<ShopListQuery, ShopListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ShopListQuery, ShopListQueryVariables>(ShopListDocument, options);
+      }
+export function useShopListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShopListQuery, ShopListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ShopListQuery, ShopListQueryVariables>(ShopListDocument, options);
+        }
+export type ShopListQueryHookResult = ReturnType<typeof useShopListQuery>;
+export type ShopListLazyQueryHookResult = ReturnType<typeof useShopListLazyQuery>;
+export type ShopListQueryResult = Apollo.QueryResult<ShopListQuery, ShopListQueryVariables>;
 export const ShopPageDocument = gql`
     query ShopPage($shopId: ID!) {
   shop(shopId: $shopId) {

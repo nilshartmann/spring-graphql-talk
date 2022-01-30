@@ -1,0 +1,8 @@
+query Shop($shopId: ID!) {
+    shop(shopId: $shopId) {
+        name
+        beers {
+            name
+        }
+    }
+}
