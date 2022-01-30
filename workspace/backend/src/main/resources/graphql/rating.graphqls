@@ -1,0 +1,81 @@
+"""
+A User in our system that is allowed to leave Ratings
+"""
+type User {
+  id: ID!
+  login: String!
+  name: String!
+}
+
+"""A Rating that has been written by an Author for a Beer"""
+type Rating {
+  """An immutable unique Id"""
+  id: ID!
+
+  """The  beer, this Rating is written for"""
+  beer: Beer!
+
+  """Who has written this Rating?"""
+  author: User!
+
+  """A comment for this beer"""
+  comment: String!
+
+  """Number of stars given with this rating"""
+  stars: Int!
+}
+
+"""Representation of a Beer that has been rated"""
+type Beer {
+  """Unique, immutable Id, that identifies this Beer"""
+  id: ID!
+
+  """The name of the beer"""
+  name: String!
+
+  """The Beer's price"""
+  price: String!
+
+  """List of all Ratings for this Beer"""
+  ratings: [Rating!]!
+
+  """Average Rating of this Beer"""
+  averageStars: Int!
+
+  """List of Ratings that has at exactly 'stars' Stars"""
+  ratingsWithStars(stars: Int!): [Rating!]!
+}
+
+type Query {
+  """Returns a specific `Beer`, identified by its `id`, or `null` if not found"""
+  beer(beerId: ID!): Beer
+
+  """Returns a list of all `Beer` objects that we have in our system"""
+  beers: [Beer!]!
+
+  ping(msg: String): String!
+}
+
+input AddRatingInput {
+  beerId: ID!
+  userId: ID!
+  comment: String!
+  stars: Int!
+}
+
+type Mutation {
+  """Add a new `Rating` to a `Beer` and returns the new created `Rating`"""
+  addRating(ratingInput: AddRatingInput): Rating!
+
+  """
+  Change the name of this `Beer`.
+
+  Note: this is only allowed for admins (currently user 'U5' / 'nils')
+  """
+  updateBeerName(beerId: ID!, newName: String!): Beer!
+}
+
+type Subscription {
+  onNewRating: Rating!
+  newRatings(beerId: ID!): Rating!
+}

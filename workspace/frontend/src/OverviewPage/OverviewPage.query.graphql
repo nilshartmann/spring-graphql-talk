@@ -1,0 +1,7 @@
+query OverviewPage {
+  beers {
+    id
+    name
+    averageStars
+  }
+}

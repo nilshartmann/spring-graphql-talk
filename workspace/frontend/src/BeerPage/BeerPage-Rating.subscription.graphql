@@ -1,0 +1,13 @@
+subscription NewRating($beerId: ID!) {
+  rating: newRatings(beerId: $beerId) {
+    id
+    stars
+    beer {
+      id
+    }
+    author {
+      name
+    }
+    comment
+  }
+}

@@ -1,0 +1,20 @@
+fragment Shop on Shop {
+  id
+  name
+
+  address {
+    street
+    postalCode
+    city
+    country
+  }
+  beers {
+    id
+    name
+  }
+}
+query ShopPage($shopId: ID!) {
+  shop(shopId: $shopId) {
+    ...Shop
+  }
+}

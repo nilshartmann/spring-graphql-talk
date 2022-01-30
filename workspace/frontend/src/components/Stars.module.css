@@ -1,0 +1,14 @@
+.Stars {
+  display: inline-block;
+  unicode-bidi: bidi-override;
+}
+.Stars span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+  font-size: 75%;
+}
+.Stars .filled:before {
+  content: "\2605";
+  position: absolute;
+}

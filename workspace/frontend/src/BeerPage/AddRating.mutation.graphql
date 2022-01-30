@@ -1,0 +1,20 @@
+fragment BeerRatings on Beer {
+  id
+  ratings {
+    id
+  }
+}
+
+mutation AddRating($input: AddRatingInput!) {
+  addRating(ratingInput: $input) {
+    id
+    beer {
+      id
+    }
+    author {
+      name
+    }
+    comment
+    stars
+  }
+}
