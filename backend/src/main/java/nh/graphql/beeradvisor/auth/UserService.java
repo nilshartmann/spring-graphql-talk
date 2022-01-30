@@ -14,6 +14,8 @@ import reactor.core.publisher.Flux;
 
 import java.util.List;
 
+import static nh.graphql.beeradvisor.Slowdown.enableUserServiceSlowDown;
+
 /**
  * @author Nils Hartmann (nils@nilshartmann.net)
  */
@@ -40,15 +42,14 @@ public class UserService {
     return user;
   }
   public Flux<User> findUsersWithIds(List<String> userIds) {
-    logger.debug("Loading users with Ids '{}'", userIds);
-
     var result = webClient.get()
       .uri(uriBuilder -> uriBuilder
         .path("/users/{userIds}")
+        .queryParamIfPresent("slowDown", enableUserServiceSlowDown)
         .build(String.join(",", userIds)))
       .retrieve().bodyToFlux(User.class)
-      .doFirst(() -> logger.info("Requesting users with ids '{}'!", userIds))
-      .doOnNext(x -> logger.info("Retrieved Result for user ids '{}: {}'!", userIds, x));
+      .doFirst(() -> logger.trace("Requesting users with ids '{}'!", userIds))
+      .doOnNext(x -> logger.trace("Retrieved Result for user ids '{}: {}'!", userIds, x));
 
     return result;
   }
