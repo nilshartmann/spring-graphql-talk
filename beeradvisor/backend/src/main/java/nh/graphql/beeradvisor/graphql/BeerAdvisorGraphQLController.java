@@ -3,30 +3,28 @@ package nh.graphql.beeradvisor.graphql;
 import nh.graphql.beeradvisor.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
+import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Nils Hartmann (nils@nilshartmann.net)
  */
 @Controller
-public class BeerAdvisorController {
-  private final Logger logger = LoggerFactory.getLogger(BeerAdvisorController.class);
+public class BeerAdvisorGraphQLController {
+  private final Logger logger = LoggerFactory.getLogger(BeerAdvisorGraphQLController.class);
 
   private final BeerRepository beerRepository;
   private final BeerAdvisorService beerAdvisorService;
   private final ShopRepository shopRepository;
   private final RatingPublisher ratingPublisher;
 
-  public BeerAdvisorController(BeerRepository beerRepository, BeerAdvisorService beerAdvisorService, ShopRepository shopRepository, RatingPublisher ratingPublisher) {
+  public BeerAdvisorGraphQLController(BeerRepository beerRepository, BeerAdvisorService beerAdvisorService, ShopRepository shopRepository, RatingPublisher ratingPublisher) {
     this.beerRepository = beerRepository;
     this.beerAdvisorService = beerAdvisorService;
     this.shopRepository = shopRepository;
@@ -87,4 +85,21 @@ public class BeerAdvisorController {
 
     return "HELLO, " + msg;
   }
+
+  @SchemaMapping
+  public List<Shop> shops(Beer beer) {
+    final String beerId = beer.getId();
+    return shopRepository.findShopsWithBeer(beerId);
+  }
+
+  @SchemaMapping
+  public Integer averageStars(Beer beer) {
+    return (int) Math.round(beer.getRatings().stream().mapToDouble(Rating::getStars).average().getAsDouble());
+  }
+
+  @SchemaMapping
+  public List<Rating> ratingsWithStars(Beer beer, @Argument int stars) {
+    return beer.getRatings().stream().filter(r -> r.getStars() == stars).collect(Collectors.toList());
+  }
+
 }
