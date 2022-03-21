@@ -28,9 +28,9 @@ public class UserService {
   private final RestTemplate restTemplate;
   private final WebClient webClient;
 
-  public UserService(RestTemplate restTemplate, @Value("${beeradvisor.userservice.url}") String url) {
+  public UserService(@Value("${beeradvisor.userservice.url}") String url) {
     this.userServiceUrl = url;
-    this.restTemplate = restTemplate;
+    this.restTemplate = new RestTemplate();
     this.webClient = WebClient.builder().baseUrl(userServiceUrl).build();
   }
 
@@ -54,10 +54,15 @@ public class UserService {
     return result;
   }
 
+  record LoginRequest(String username, String password) {
+  }
 
-  public User getUserByLogin(String userName) {
+  public User getUserByLogin(String userName, String password) {
     logger.info("login with userName '{}' from '{}'", userName, userServiceUrl);
-    User user = restTemplate.getForObject(this.userServiceUrl + "/login/{userName}", User.class, userName);
+    User user = restTemplate.
+      postForObject(this.userServiceUrl + "/login",
+        new LoginRequest(userName, password),
+        User.class, userName);
     return user;
   }
 }

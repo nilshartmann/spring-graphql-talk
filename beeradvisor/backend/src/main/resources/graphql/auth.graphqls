@@ -9,5 +9,5 @@ type LoginResponse {
 }
 
 extend type Mutation {
-  login(username: String!): LoginResponse!
+  login(username: String!, password: String!): LoginResponse!
 }

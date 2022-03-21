@@ -3,60 +3,99 @@ import styles from "./Form.module.css";
 
 interface LoginFormProps {
   error: string | null;
-  login: (userId: string) => void;
+  login: (userId: string, password: string) => void;
 }
 
 interface LoginFormState {
-  userId: string;
+  username: string;
+  password: string;
 }
 
-export default class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
-  readonly state: LoginFormState = {
-    userId: "",
-  };
+export default function LF({ error, login }: LoginFormProps) {
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-  onUserIdChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
-    this.setState({ userId: e.currentTarget.value });
-  };
-
-  onLoginClick = (e: React.SyntheticEvent<HTMLElement>) => {
+  const onLoginClick = (e: React.SyntheticEvent<HTMLElement>) => {
     e.preventDefault();
-
-    const { userId } = this.state;
-    const { login } = this.props;
-
-    login(userId);
+    login(username, password);
   };
 
-  render() {
-    const { error } = this.props;
-    const { userId } = this.state;
+  const buttonEnabled = !!username;
 
-    const buttonEnabled = !!userId;
-
-    return (
-      <div className={styles.Form}>
-        <div className={styles.Hint}>Please login first</div>
-        <form>
-          <fieldset>
-            <div>
-              <label>Your login:</label>{" "}
-              <input
-                type="text"
-                value={userId}
-                onChange={this.onUserIdChange}
-                onKeyPress={(e) => (e.keyCode === 13 ? this.onLoginClick(e) : null)}
-              />
-            </div>
-            {error && <div>Could not login: {error}</div>}
-            <div>
-              <button disabled={!buttonEnabled} onClick={this.onLoginClick}>
-                Login
-              </button>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div className={styles.Form}>
+      <div className={styles.Hint}>Please login first</div>
+      <form>
+        <fieldset>
+          <div>
+            <label>Your Username:</label>{" "}
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.currentTarget.value)}
+              onKeyPress={(e) => (e.keyCode === 13 ? onLoginClick(e) : null)}
+            />
+          </div>
+          <div>
+            <label>Password:</label>{" "}
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+              onKeyPress={(e) => (e.keyCode === 13 ? onLoginClick(e) : null)}
+            />
+          </div>
+          {error && <div>Could not login: {error}</div>}
+          <div>
+            <button disabled={!buttonEnabled} onClick={onLoginClick}>
+              Login
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  );
 }
+//
+// export default class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
+//   readonly state: LoginFormState = {
+//     username: "",
+//     password: "",
+//   };
+//
+//   onUserIdChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
+//     this.setState({ username: e.currentTarget.value });
+//   };
+//
+//   render() {
+//     const { error } = this.props;
+//     const { username } = this.state;
+//
+//     const buttonEnabled = !!username;
+//
+//     return (
+//       <div className={styles.Form}>
+//         <div className={styles.Hint}>Please login first</div>
+//         <form>
+//           <fieldset>
+//             <div>
+//               <label>Your login:</label>{" "}
+//               <input
+//                 type="text"
+//                 value={username}
+//                 onChange={this.onUserIdChange}
+//                 onKeyPress={(e) => (e.keyCode === 13 ? this.onLoginClick(e) : null)}
+//               />
+//             </div>
+//             {error && <div>Could not login: {error}</div>}
+//             <div>
+//               <button disabled={!buttonEnabled} onClick={this.onLoginClick}>
+//                 Login
+//               </button>
+//             </div>
+//           </fieldset>
+//         </form>
+//       </div>
+//     );
+//   }
+// }

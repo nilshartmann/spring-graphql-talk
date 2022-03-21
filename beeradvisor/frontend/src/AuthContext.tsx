@@ -4,7 +4,7 @@ import { useLoginMutation } from "./generated/graphql";
 
 interface IAuthContext {
   auth: AuthInfoState | AuthErrorState | null;
-  login(userId: string): void;
+  login(userId: string, password: string): void;
 }
 
 const AuthContext = React.createContext<IAuthContext>({
@@ -31,10 +31,10 @@ function AuthProvider({ children }: AuthProviderProps) {
   });
 
   const login = React.useCallback(
-    async function login(username: string) {
+    async function login(username: string, password: string) {
       setAuthToken(null);
 
-      const loginResult = await loginMutation({ variables: { username } });
+      const loginResult = await loginMutation({ variables: { username, password } });
       if (!loginResult.data) {
         setAuthState({
           auth: {

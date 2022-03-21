@@ -29,10 +29,10 @@ public class LoginController {
     }
 
     @MutationMapping
-    public LoginResponse login(@Argument String username) {
-      User user = userService.getUserByLogin(username);
+    public LoginResponse login(@Argument String username, @Argument String password) {
+      User user = userService.getUserByLogin(username, password);
       if (user == null) {
-        return LoginResponse.failed("Unknown userName");
+        return LoginResponse.failed("Unknown username/password");
       }
 
       final String token = jwtTokenService.createTokenForUser(user);

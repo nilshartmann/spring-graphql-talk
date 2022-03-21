@@ -37,9 +37,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     http.addFilterBefore(authenticationTokenFilter(), BasicAuthenticationFilter.class);
   }
-
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.build();
-    }
 }

@@ -43,7 +43,7 @@ function UpdateBeerForm({ beername, onNewBeerName }: UpdateBeerFormProps) {
   const [newName, setNewName] = React.useState(beername);
   return (
     <div className={styles.Form}>
-      <h3>Your admin and can change the name of {beername}</h3>
+      <h3>You are admin and can change the name of {beername}</h3>
       <form>
         <fieldset>
           <div>

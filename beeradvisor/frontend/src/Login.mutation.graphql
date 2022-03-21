@@ -1,5 +1,5 @@
-mutation Login($username: String!) {
-  login(username: $username) {
+mutation Login($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
     authentication {
       userId
       username

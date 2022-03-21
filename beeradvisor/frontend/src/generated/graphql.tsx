@@ -92,6 +92,7 @@ export type MutationAddRatingArgs = {
 
 
 export type MutationLoginArgs = {
+  password: Scalars['String'];
   username: Scalars['String'];
 };
 
@@ -291,6 +292,7 @@ export type UpdateBeerNameMutation = (
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
+  password: Scalars['String'];
 }>;
 
 
@@ -577,8 +579,8 @@ export type UpdateBeerNameMutationHookResult = ReturnType<typeof useUpdateBeerNa
 export type UpdateBeerNameMutationResult = Apollo.MutationResult<UpdateBeerNameMutation>;
 export type UpdateBeerNameMutationOptions = Apollo.BaseMutationOptions<UpdateBeerNameMutation, UpdateBeerNameMutationVariables>;
 export const LoginDocument = gql`
-    mutation Login($username: String!) {
-  login(username: $username) {
+    mutation Login($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
     authentication {
       userId
       username
@@ -604,6 +606,7 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
  *      username: // value for 'username'
+ *      password: // value for 'password'
  *   },
  * });
  */

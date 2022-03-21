@@ -15,7 +15,7 @@ public class BeerService {
 		this.beerRepository = beerRepository;
 	}
 
-	@PreAuthorize("isAuthenticated() && authentication.principal.id == 'U5'")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Beer updateBeer(String beerId, String newName) {
 		final Beer beer = beerRepository.getBeer(beerId);
 		beer.setName(newName);

@@ -40,28 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-/*
-    logger.info(">>>>>>>> FILTER <<<<<<<<< ");
-    StringBuilder builder = new StringBuilder("HEADER:\n");
-    final Enumeration<String> headerNames = request.getHeaderNames();
-    while (headerNames.hasMoreElements()) {
-      String headerName = headerNames.nextElement();
-      String headerValue = request.getHeader(headerName);
-      builder.append(String.format("'%s' => '%s'%n", headerName, headerValue));
-    }
-
-    builder.append(String.format("requestUri => '%s'%n", request.getRequestURI()));
-
-    logger.info(builder.toString());
-*/
 
     try {
       authenticateIfNeeded(request);
     } catch (AuthenticationException bed) {
       logger.error("Could not authenticate: " + bed, bed);
       SecurityContextHolder.clearContext();
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      return;
     }
 
     filterChain.doFilter(request, response);
@@ -82,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
       UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null,
-          "karl".equals(user.getLogin()) ? ROLE_GREETER : ROLE_USER);
+          user.getRoles().stream().map(SimpleGrantedAuthority::new).toList());
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }
   }
