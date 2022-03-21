@@ -1,7 +1,7 @@
 import * as React from "react";
 import styles from "./Footer.module.css";
 
-const GITHUB_REPO = "https://github.com/nilshartmann/graphql-java-talk";
+const GITHUB_REPO = "https://github.com/nilshartmann/spring-graphql-talk";
 
 const Footer = () => (
   <footer className={styles.Footer}>
