@@ -26,7 +26,7 @@ public class ShopController {
   @SchemaMapping
   public List<Beer> beers(Shop shop) {
     final List<String> beerIds = shop.getBeers();
-    return beerRepository.findWithIds(beerIds);
+    return beerRepository.findByIdIn(beerIds);
   }
 
   @SchemaMapping

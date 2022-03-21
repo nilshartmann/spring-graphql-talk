@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Nils Hartmann (nils@nilshartmann.net)
@@ -20,32 +21,30 @@ public class BeerAdvisorController {
   private final Logger logger = LoggerFactory.getLogger(BeerAdvisorController.class);
 
   private final BeerRepository beerRepository;
-  private final BeerService beerService;
+  private final BeerAdvisorService beerAdvisorService;
   private final ShopRepository shopRepository;
-  private final RatingService ratingService;
   private final RatingPublisher ratingPublisher;
 
-  public BeerAdvisorController(BeerRepository beerRepository, BeerService beerService, ShopRepository shopRepository, RatingService ratingService, RatingPublisher ratingPublisher) {
+  public BeerAdvisorController(BeerRepository beerRepository, BeerAdvisorService beerAdvisorService, ShopRepository shopRepository, RatingPublisher ratingPublisher) {
     this.beerRepository = beerRepository;
-    this.beerService = beerService;
+    this.beerAdvisorService = beerAdvisorService;
     this.shopRepository = shopRepository;
-    this.ratingService = ratingService;
     this.ratingPublisher = ratingPublisher;
   }
 
   @QueryMapping
-  public Beer beer(@Argument String beerId) {
-    return beerRepository.getBeer(beerId);
+  public Optional<Beer> beer(@Argument String beerId) {
+    return beerRepository.findById(beerId);
   }
 
   @QueryMapping
-  public List<Beer> beers() {
+  public Iterable<Beer> beers() {
     return beerRepository.findAll();
   }
 
   @MutationMapping
   public Beer updateBeerName(@Argument String beerId, @Argument String newName) {
-    return beerService.updateBeer(beerId, newName);
+    return beerAdvisorService.updateBeer(beerId, newName);
   }
 
   @QueryMapping
@@ -61,7 +60,11 @@ public class BeerAdvisorController {
   @MutationMapping
   public Rating addRating(@Argument AddRatingInput ratingInput) {
     logger.debug("Rating Input {}", ratingInput);
-    return ratingService.addRating(ratingInput);
+    return beerAdvisorService.addRating(ratingInput.userId(),
+      ratingInput.beerId(),
+      ratingInput.comment(),
+      ratingInput.stars()
+    );
   }
 
   @SubscriptionMapping
