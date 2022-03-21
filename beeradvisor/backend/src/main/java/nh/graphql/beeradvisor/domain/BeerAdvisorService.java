@@ -43,7 +43,7 @@ public class BeerAdvisorService {
     Rating rating = beer.addRating(userId, comment, stars);
     beerRepository.save(beer);
 
-    applicationEventPublisher.publishEvent(new RatingCreatedEvent(rating));
+    applicationEventPublisher.publishEvent(new RatingCreatedEvent(rating.getId()));
 
     return rating;
   }
