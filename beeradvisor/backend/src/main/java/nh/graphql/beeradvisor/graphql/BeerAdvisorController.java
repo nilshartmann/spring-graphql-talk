@@ -10,6 +10,7 @@ import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +59,7 @@ public class BeerAdvisorController {
   }
 
   @MutationMapping
-  public Rating addRating(@Argument AddRatingInput ratingInput) {
+  public Rating addRating(@Valid @Argument AddRatingInput ratingInput) {
     logger.debug("Rating Input {}", ratingInput);
     return beerAdvisorService.addRating(ratingInput.userId(),
       ratingInput.beerId(),
