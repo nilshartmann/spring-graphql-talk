@@ -15,4 +15,4 @@ pluginManagement {
 }
 
 rootProject.name = 'beeradvisor-workspace'
-include 'backend', 'userservice', 'frontend'
+include 'backend', 'userservice'
