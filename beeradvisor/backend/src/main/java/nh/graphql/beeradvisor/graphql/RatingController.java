@@ -12,6 +12,7 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.graphql.execution.BatchLoaderRegistry;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -24,17 +25,18 @@ public class RatingController {
   private final Logger logger = LoggerFactory.getLogger(getClass());
   private final UserService userService;
 
-  public RatingController(UserService userService, BatchLoaderRegistry registry) {
+  public RatingController(UserService userService, BatchLoaderRegistry batchLoaderRegistry) {
     this.userService = userService;
-    registry.forTypePair(String.class, User.class).registerBatchLoader(
-      (userIds, env) -> {
-        logger.info("Loading Users for Ratings with userIds '{}'", userIds);
+    batchLoaderRegistry.forTypePair(String.class,User.class).registerBatchLoader(
+      (userIds,env)-> {
+        logger.info("Loading Users for Ratings with userIds'{}'",userIds);
         return userService.findUsersWithIds(userIds);
       }
     );
+
   }
 
-  // Naive Implementierung:
+//  Naive Implementierung:
 //  @SchemaMapping(typeName = "Rating", field = "author")
 //  public User author(Rating rating) {
 //    logger.info("Loading User with id {} for rating {}",rating.getUserId(), rating.getId());
@@ -43,9 +45,17 @@ public class RatingController {
 
   // Besser:
   @SchemaMapping(typeName = "Rating", field = "author")
-  public CompletableFuture<User> author(Rating rating, DataLoader<String, User> userDataLoader) {
-    return userDataLoader.load(rating.getUserId());
+  public Mono<User> author(Rating rating) {
+    logger.info("Loading User with id {} for rating {}",rating.getUserId(), rating.getId());
+    return userService.findUser(rating.getUserId());
   }
+
+
+  // Noch Besser:
+//  @SchemaMapping(typeName = "Rating", field = "author")
+//  public CompletableFuture<User> author(Rating rating, DataLoader<String, User> userDataLoader) {
+//    return userDataLoader.load(rating.getUserId());
+//  }
 
 //  @BatchMapping
 //  public Flux<User> author(List<Rating> ratings) {

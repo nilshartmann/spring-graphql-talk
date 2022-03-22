@@ -32,6 +32,13 @@ public class UserController {
     return result;
   }
 
+  @GetMapping(value = "/user/{userId}")
+  public User user(@PathVariable String userId, @RequestParam(name = "slowDown", defaultValue = "false") boolean enableSlowdown) {
+    logger.info("Finding User with id {}", userId);
+    slowDown(enableSlowdown);
+    return userRepository.findUserWithId(userId);
+  }
+
   record LoginRequest(String username, String password) {
   }
 

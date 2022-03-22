@@ -80,4 +80,8 @@ public class Rating {
   public int hashCode() {
     return Objects.hash(id);
   }
+
+  public String toString() {
+    return "[Rating id=" + this.id + ", userId=" + this.userId + "]";
+  }
 }

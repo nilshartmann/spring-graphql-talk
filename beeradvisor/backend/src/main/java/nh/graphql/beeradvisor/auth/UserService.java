@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -35,12 +36,30 @@ public class UserService {
   }
 
   public User getUser(String userId) {
-    List<String> userIds = Utils.listOf(userId);
+    var result = webClient.get()
+      .uri(uriBuilder -> uriBuilder
+        .path("/user/{userId}")
+        .queryParamIfPresent("slowDown", enableUserServiceSlowDown)
+        .build(userId))
+      .retrieve()
+      .bodyToMono(User.class)
+      .block();
 
-    User user = findUsersWithIds(userIds).blockFirst();
-
-    return user;
+    return result;
   }
+
+  public Mono<User> findUser(String userId) {
+    var result = webClient.get()
+      .uri(uriBuilder -> uriBuilder
+        .path("/user/{userId}")
+        .queryParamIfPresent("slowDown", enableUserServiceSlowDown)
+        .build(userId))
+      .retrieve()
+      .bodyToMono(User.class);
+
+    return result;
+  }
+
   public Flux<User> findUsersWithIds(List<String> userIds) {
     var result = webClient.get()
       .uri(uriBuilder -> uriBuilder

@@ -94,7 +94,7 @@ public class BeerAdvisorGraphQLController {
 
   @SchemaMapping
   public Integer averageStars(Beer beer) {
-    return (int) Math.round(beer.getRatings().stream().mapToDouble(Rating::getStars).average().getAsDouble());
+    return (int) Math.round(beer.getRatings().stream().mapToInt(Rating::getStars).average().orElse(0));
   }
 
   @SchemaMapping

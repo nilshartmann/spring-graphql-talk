@@ -23,6 +23,11 @@ public class UserRepository {
         users.add(new User("U5", "nils", "Nils", true));
     }
 
+  public User findUserWithId(String id) {
+    return users.stream().filter(u -> id.equals(u.getId()))
+      .findAny().orElse(null);
+  }
+
     public List<User> findUsersWithId(String[] ids) {
       final List<String> idList = Arrays.asList(ids);
 
