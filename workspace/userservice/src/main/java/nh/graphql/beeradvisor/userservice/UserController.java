@@ -2,10 +2,7 @@ package nh.graphql.beeradvisor.userservice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,12 +32,27 @@ public class UserController {
     return result;
   }
 
-  @GetMapping(value = "/login/{login}")
-  public User login(@PathVariable String login) {
+  @GetMapping(value = "/user/{userId}")
+  public User user(@PathVariable String userId, @RequestParam(name = "slowDown", defaultValue = "false") boolean enableSlowdown) {
+    logger.info("Finding User with id {}", userId);
+    slowDown(enableSlowdown);
+    return userRepository.findUserWithId(userId);
+  }
 
-    logger.info("Finding users with login '{}'", login);
+  record LoginRequest(String username, String password) {
+  }
 
-    return userRepository.findUserWithLogin(login);
+  @PostMapping(value = "/login" )
+  public User login(@RequestBody LoginRequest loginRequest) {
+    logger.info("Finding users with login '{}'", loginRequest);
+
+    // 😱 😱 😱
+    if (loginRequest.password.length()<5) {
+      logger.info("Invalid password supplied '{}'. For testing, please specify any password with at least five chars", loginRequest.password);
+      return null;
+    }
+
+    return userRepository.findUserWithLogin(loginRequest.username());
   }
 
   private static void slowDown(boolean enableSlowdown) {

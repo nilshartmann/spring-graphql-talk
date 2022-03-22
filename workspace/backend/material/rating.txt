@@ -1,0 +1,13 @@
+type User {
+  id: ID!
+  login: String!
+  name: String!
+}
+
+type Rating {
+  id: ID!
+  author: User!
+  comment: String!
+  stars: Int!
+}
+

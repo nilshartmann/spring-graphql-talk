@@ -1,0 +1,4 @@
+type Subscription {
+  onNewRating: Rating!
+  newRatings(beerId: ID!): Rating!
+}

@@ -1,39 +1,40 @@
 package nh.graphql.beeradvisor.domain;
 
-import nh.graphql.beeradvisor.auth.User;
-import nh.graphql.beeradvisor.auth.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * @author Nils Hartmann (nils@nilshartmann.net)
  */
 @Component
-public class BeerRatingDbImporter {
+public class DbImporter {
 
-  private static final Logger logger = LoggerFactory.getLogger(BeerRatingDbImporter.class);
+  private static final Logger logger = LoggerFactory.getLogger(DbImporter.class);
 
-  @Autowired
-  private BeerRepository beerRepository;
+  private final BeerRepository beerRepository;
+  private final ShopRepository shopRepository;
 
-//  @Autowired
-//  private UserRepository userRepository;
+  public DbImporter(BeerRepository beerRepository, ShopRepository shopRepository) {
+    this.beerRepository = beerRepository;
+    this.shopRepository = shopRepository;
+  }
 
   @PostConstruct
   @Transactional
   public void importDb() {
-    logger.info("Importing Database");
+    importBeerDb();
+    importShopDb();
+  }
 
-//    final User U1 = userRepository.newUser("U1", "waldemar", "Waldemar Vasu");
-//    final User U2 = userRepository.newUser("U2", "karl", "Karl Marx");
-//    final User U3 = userRepository.newUser("U3", "alessa", "Alessa Bradley");
-//    final User U4 = userRepository.newUser("U4", "lauren", "Lauren Jones");
-//    final User U5 = userRepository.newUser("U5", "nils", "Nils");
+  public void importBeerDb() {
+    logger.info("Importing Database");
 
     final Beer b1 = new Beer("B1", "Barfüßer", "3,80 EUR") //
         .addRating("U1", "R1", "Exceptional!", 4) //
@@ -67,12 +68,33 @@ public class BeerRatingDbImporter {
         .addRating("U2", "R13", "✊...", 5) //
         ;
 
-    beerRepository.saveBeer(b1);
-    beerRepository.saveBeer(b2);
-    beerRepository.saveBeer(b3);
-    beerRepository.saveBeer(b4);
-    beerRepository.saveBeer(b5);
-    beerRepository.saveBeer(b6);
+    beerRepository.save(b1);
+    beerRepository.save(b2);
+    beerRepository.save(b3);
+    beerRepository.save(b4);
+    beerRepository.save(b5);
+    beerRepository.save(b6);
+  }
+
+  public void importShopDb() {
+    logger.info("Importing Shop Database");
+
+    if (shopRepository.findAll().size() > 0) {
+      logger.info("Shops already imported");
+      return;
+    }
+
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/shops.csv")))) {
+      String line = null;
+      int index = 1;
+      while ((line = br.readLine()) != null) {
+        String[] parts = line.trim().split("\\|");
+        Shop shop = new Shop("S" + index++, parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6].split(","));
+        shopRepository.addShop(shop);
+      }
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
+    }
   }
 
 }

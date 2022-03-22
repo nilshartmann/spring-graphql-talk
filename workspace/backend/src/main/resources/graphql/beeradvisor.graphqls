@@ -1,0 +1,12 @@
+type Query {
+    ping: String!
+}
+
+
+
+
+
+
+
+
+

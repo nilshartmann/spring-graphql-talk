@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -28,19 +29,37 @@ public class UserService {
   private final RestTemplate restTemplate;
   private final WebClient webClient;
 
-  public UserService(RestTemplate restTemplate, @Value("${beeradvisor.userservice.url}") String url) {
+  public UserService(@Value("${beeradvisor.userservice.url}") String url) {
     this.userServiceUrl = url;
-    this.restTemplate = restTemplate;
+    this.restTemplate = new RestTemplate();
     this.webClient = WebClient.builder().baseUrl(userServiceUrl).build();
   }
 
   public User getUser(String userId) {
-    List<String> userIds = Utils.listOf(userId);
+    var result = webClient.get()
+      .uri(uriBuilder -> uriBuilder
+        .path("/user/{userId}")
+        .queryParamIfPresent("slowDown", enableUserServiceSlowDown)
+        .build(userId))
+      .retrieve()
+      .bodyToMono(User.class)
+      .block();
 
-    User user = findUsersWithIds(userIds).blockFirst();
-
-    return user;
+    return result;
   }
+
+  public Mono<User> findUser(String userId) {
+    var result = webClient.get()
+      .uri(uriBuilder -> uriBuilder
+        .path("/user/{userId}")
+        .queryParamIfPresent("slowDown", enableUserServiceSlowDown)
+        .build(userId))
+      .retrieve()
+      .bodyToMono(User.class);
+
+    return result;
+  }
+
   public Flux<User> findUsersWithIds(List<String> userIds) {
     var result = webClient.get()
       .uri(uriBuilder -> uriBuilder
@@ -54,10 +73,15 @@ public class UserService {
     return result;
   }
 
+  record LoginRequest(String username, String password) {
+  }
 
-  public User getUserByLogin(String userName) {
+  public User getUserByLogin(String userName, String password) {
     logger.info("login with userName '{}' from '{}'", userName, userServiceUrl);
-    User user = restTemplate.getForObject(this.userServiceUrl + "/login/{userName}", User.class, userName);
+    User user = restTemplate.
+      postForObject(this.userServiceUrl + "/login",
+        new LoginRequest(userName, password),
+        User.class, userName);
     return user;
   }
 }
