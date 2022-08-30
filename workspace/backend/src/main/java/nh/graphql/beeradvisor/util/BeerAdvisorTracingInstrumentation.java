@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TracingInstrumentation, very similiar to original {@link TracingInstrumentation}
- * but writes some other informations that I need for for demonstration purposes.
+ * but writes some other information that I need for demonstration purposes.
  */
 @Component
 public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
@@ -28,25 +28,9 @@ public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
             private final Map<String, Object> parseMap = new LinkedHashMap<>();
             private final Map<String, Object> validationMap = new LinkedHashMap<>();
             private final long startRequestMillis = System.currentTimeMillis();
-            private boolean trace = false;
-            private boolean traceAll = false;
             private final AtomicInteger counter = new AtomicInteger();
 
             public TracingContext beginField(DataFetchingEnvironment dataFetchingEnvironment, boolean trivialDataFetcher) {
-                if (dataFetchingEnvironment.getField().getDirectives("trace").size() > 0) {
-                    trace = true;
-                }
-
-                if (dataFetchingEnvironment.getField().getDirectives("traceAll").size() > 0) {
-                    trace = true;
-                    traceAll = true;
-                }
-
-                if (!trace) {
-                    return () -> {
-                    };
-                }
-
 
                 long startFieldFetch = System.currentTimeMillis();
                 final int fetcherNo = trivialDataFetcher ? -1 : counter.incrementAndGet();
