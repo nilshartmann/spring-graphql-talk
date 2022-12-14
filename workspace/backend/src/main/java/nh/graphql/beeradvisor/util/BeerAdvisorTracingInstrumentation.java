@@ -1,6 +1,5 @@
 package nh.graphql.beeradvisor.util;
 
-import graphql.GraphQLContext;
 import graphql.com.google.common.collect.ImmutableList;
 import graphql.execution.ExecutionStepInfo;
 import graphql.execution.instrumentation.InstrumentationState;
@@ -13,13 +12,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import static graphql.schema.GraphQLTypeUtil.simplePrint;
 
 /**
  * TracingInstrumentation, very similiar to original {@link TracingInstrumentation}
- * but writes some other information that I need for demonstration purposes.
+ * but writes durations in ms and adds some other informations
  */
-@Component
+//@Component
 public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
     @Override
     public InstrumentationState createState() {
@@ -28,12 +28,14 @@ public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
             private final Map<String, Object> parseMap = new LinkedHashMap<>();
             private final Map<String, Object> validationMap = new LinkedHashMap<>();
             private final long startRequestMillis = System.currentTimeMillis();
-            private final AtomicInteger counter = new AtomicInteger();
 
             public TracingContext beginField(DataFetchingEnvironment dataFetchingEnvironment, boolean trivialDataFetcher) {
+                if (trivialDataFetcher) {
+                    return () -> {
+                    };
+                }
 
                 long startFieldFetch = System.currentTimeMillis();
-                final int fetcherNo = trivialDataFetcher ? -1 : counter.incrementAndGet();
                 return () -> {
                     long now = System.currentTimeMillis();
                     long duration = now - startFieldFetch;
@@ -41,42 +43,13 @@ public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
                     ExecutionStepInfo executionStepInfo = dataFetchingEnvironment.getExecutionStepInfo();
 
                     Map<String, Object> fetchMap = new LinkedHashMap<>();
-                    String fieldName = executionStepInfo.getPath().toString();
+                    fetchMap.put("path", executionStepInfo.getPath().toString());
+                    fetchMap.put("fieldName", simplePrint(executionStepInfo.getParent().getUnwrappedNonNullType()) + "." + executionStepInfo.getFieldDefinition().getName());
+                    fetchMap.put("startOffset_ms", startOffset);
+                    fetchMap.put("duration_ms", duration);
+                    fetchMap.put("thread", Thread.currentThread().getName());
 
-                    String source = GraphQLUtils.getFieldContext(dataFetchingEnvironment);
-
-                    if (!traceAll) {
-                        if (!trivialDataFetcher) {
-                            // "structured" format: only trace non-trivial datafetchers
-                            fetchMap.put("fetcher_start_no", fetcherNo);
-                            fetchMap.put("field", fieldName);
-                            if (source != null) {
-                                fetchMap.put("description", source);
-                            }
-                            fetchMap.put("startedAt_ms", startOffset);
-                            fetchMap.put("took_ms", duration);
-                            fetchMap.put("thread", Thread.currentThread().getName());
-                        }
-                    } else {
-                        // "Text"-Format: Trace in more human readable form,
-                        // also include trivial fetcher,
-                        // so that we can have a form of "logging" in the extensions field,
-                        // to see what's going on at-all
-
-                        String msg = String.format("fetched by %s datafetcher in %sms at %sms on thread %s",
-                            trivialDataFetcher ? "trivial" : "CUSTOM",
-                            duration,
-                            startOffset,
-                            Thread.currentThread().getName());
-                        fetchMap.put(fieldName, msg);
-                        if (source != null) {
-                            fetchMap.put("source", source);
-                        }
-                    }
-
-                    if (!fetchMap.isEmpty()) {
-                        fieldData.add(fetchMap);
-                    }
+                    fieldData.add(fetchMap);
                 };
             }
 
@@ -113,10 +86,10 @@ public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
              */
             public Map<String, Object> snapshotTracingData() {
                 Map<String, Object> traceMap = new LinkedHashMap<>();
-//        traceMap.put("version", 1L);
-                traceMap.put("overall_query_execution_time", System.currentTimeMillis() - startRequestMillis);
-//        traceMap.put("parsing", copyMap(parseMap));
-//        traceMap.put("validation", copyMap(validationMap));
+                traceMap.put("version", 1L);
+                traceMap.put("OVERALL_DURATION_MS", System.currentTimeMillis() - startRequestMillis);
+                traceMap.put("parsing", copyMap(parseMap));
+                traceMap.put("validation", copyMap(validationMap));
                 traceMap.put("execution", executionData());
 
                 return traceMap;
@@ -133,5 +106,6 @@ public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
                 return map;
             }
         };
+
     }
 }
