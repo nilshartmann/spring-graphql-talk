@@ -1,0 +1,14 @@
+record AddRatingInput(String beerId,
+                        String userId,
+                        int stars,
+                        String comment) {}
+
+  @MutationMapping
+  public Rating addRating(@Argument AddRatingInput ratingInput) {
+    return this.beerAdvisorService.addRating(
+      ratingInput.userId(),
+      ratingInput.beerId(),
+      ratingInput.comment(),
+      ratingInput.stars()
+    );
+  }

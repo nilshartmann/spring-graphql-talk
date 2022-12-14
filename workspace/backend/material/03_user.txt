@@ -4,10 +4,8 @@ type User {
   name: String!
 }
 
-type Rating {
-  id: ID!
+extend type Rating {
   author: User!
-  comment: String!
-  stars: Int!
 }
+
 

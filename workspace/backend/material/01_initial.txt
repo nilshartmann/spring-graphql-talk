@@ -1,0 +1,14 @@
+type Beer  {
+    id: ID!
+    name: String!
+    """
+    Der Preis darf nicht höher sein als **zehn Euro**
+    """
+    price: String!
+
+}
+
+type Query {
+    beer(beerId: ID): Beer
+    beers: [Beer!]!
+}

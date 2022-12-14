@@ -1,0 +1,12 @@
+type Rating {
+  id: ID!
+
+  comment: String!
+  stars: Int!
+}
+
+extend type Beer {
+    ratings: [Rating!]!
+}
+
+
