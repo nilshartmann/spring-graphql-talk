@@ -1,12 +1,21 @@
+type Rating {
+  id: ID!
+
+  comment: String!
+  stars: Int!
+}
+
 type Beer  {
     id: ID!
     name: String!
     """
-    Der Preis darf nicht höher sein als **zehn Euro**
+    Price must not be higher than **ten euros**
     """
     price: String!
-
+    ratings: [Rating!]!
 }
+
+
 
 type Query {
     beer(beerId: ID): Beer

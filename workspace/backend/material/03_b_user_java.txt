@@ -1,0 +1,4 @@
+    @SchemaMapping
+    public Mono<User> author(Rating rating) {
+        return userService.findUser(rating.getUserId());
+    }
