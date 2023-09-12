@@ -13,7 +13,7 @@ export default function BeerPage() {
     fetchPolicy: "cache-and-network",
   });
 
-  if (loading) {
+  if (loading && !data) {
     return <h1>Loading...</h1>;
   }
   if (error) {
