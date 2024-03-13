@@ -1,0 +1,21 @@
+
+public RatingController(UserService userService, BatchLoaderRegistry batchLoaderRegistry) {
+    this.userService = userService;
+    batchLoaderRegistry.forTypePair(String.class,User.class).registerBatchLoader(
+      (userIds,env)-> {
+        logger.info("Loading Users for Ratings with userIds'{}'",userIds);
+        return userService.findUsersWithIds(userIds);
+      }
+    );
+  }
+
+
+
+
+
+
+
+ @SchemaMapping(typeName = "Rating", field = "author")
+ public CompletableFuture<User> author(Rating rating, DataLoader<String, User> userDataLoader) {
+   return userDataLoader.load(rating.getUserId());
+ }
