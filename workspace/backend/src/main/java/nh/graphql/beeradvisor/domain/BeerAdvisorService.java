@@ -44,6 +44,15 @@ public class BeerAdvisorService {
     return result;
   }
 
+  @Async
+  public CompletableFuture<Integer> calculateAverageStars_async(Beer beer) {
+    slowdown(800);
+    var result = (int) Math.round(beer.getRatings().stream().mapToInt(Rating::getStars).average().orElse(0));
+
+    return CompletableFuture.completedFuture(result);
+  }
+
+
   public static void slowdown(long l) {
     try {
       Thread.sleep(l);
