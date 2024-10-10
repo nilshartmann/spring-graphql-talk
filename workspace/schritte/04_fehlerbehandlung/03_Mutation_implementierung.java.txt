@@ -1,0 +1,26 @@
+    record AddRatingInput(String beerId, String userId, String comment, @Max(5) int stars) {
+    }
+
+    interface AddRatingResult {
+    }
+
+    record AddRatingSuccess(Rating newRating) implements AddRatingResult {
+    }
+
+    record AddRatingError(String message, int code) implements AddRatingResult {
+    }
+
+    @MutationMapping
+    AddRatingResult addRating(@Valid @Argument AddRatingInput ratingInput) {
+        logger.debug("Rating Input {}", ratingInput);
+        try {
+            var newRating = beerAdvisorService.addRating(ratingInput.userId(),
+                ratingInput.beerId(),
+                ratingInput.comment(),
+                ratingInput.stars()
+            );
+            return new AddRatingSuccess(newRating);
+        } catch (Exception ex) {
+            return new AddRatingError(ex.getMessage(), 666);
+        }
+    }

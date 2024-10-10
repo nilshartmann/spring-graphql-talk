@@ -1,0 +1,4 @@
+    @SchemaMapping
+    public Integer averageStars(Beer beer) {
+        return beerAdvisorService.calculateAverageStars(beer);
+    }

@@ -1,0 +1,21 @@
+type Rating {
+  id: ID!
+
+  comment: String!
+  stars: Int!
+}
+
+extend type Beer {
+    ratings: [Rating!]!
+}
+
+input AddRatingInput {
+  beerId: ID!
+  userId: ID!
+  comment: String!
+  stars: Int!
+}
+
+type Mutation {
+  addRating(ratingInput: AddRatingInput): Rating!
+}

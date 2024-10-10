@@ -1,0 +1,12 @@
+mutation {
+  addRating(
+    ratingInput: { beerId: "B1", comment: "huhu", userId: "U1", stars: 13 }
+  ) {
+    ...on AddRatingError {
+      message code
+    }
+    ...on AddRatingSuccess {
+      newRating { id }
+    }
+  }
+}

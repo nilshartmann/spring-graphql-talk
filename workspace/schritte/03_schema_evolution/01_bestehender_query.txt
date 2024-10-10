@@ -1,0 +1,6 @@
+{
+  beer(beerId: "B1") {
+    id
+    price
+  }
+}

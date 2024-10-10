@@ -1,0 +1,9 @@
+  @QueryMapping
+  public Iterable<Beer> beers() {
+    return beerRepository.findAll();
+  }
+
+  @QueryMapping
+  public Optional<Beer> beer(@Argument String beerId) {
+    return beerRepository.findById(beerId);
+  }
