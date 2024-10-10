@@ -1,3 +1,64 @@
-type Query  {
-    ping: String
+
+type Rating {
+    id: ID!
+
+    comment: String!
+    stars: Int! @deprecated(reason: "Keine Bewertung mehr!")
+    author: User!
+}
+
+input AddRatingInput {
+    beerId: ID!
+    userId: ID!
+    comment: String!
+    stars: Int!
+}
+
+
+
+type AddRatingSuccess  {
+    newRating: Rating!
+}
+
+type AddRatingError  {
+    message: String!
+    code: Int!
+}
+
+union AddRatingResult = AddRatingError | AddRatingSuccess
+
+
+
+
+type Mutation {
+    addRating(ratingInput: AddRatingInput): AddRatingResult!
+}
+
+type User {
+    id: ID!
+    login: String!
+    name: String!
+}
+
+
+
+type Beer  {
+    id: ID!
+    name: String!
+    """
+    Price must not be higher than **ten euros**
+    """
+    price: String!
+    ratings: [Rating!]!
+    averageStars: Int!
+}
+
+type Query {
+    beer(beerId: ID!): Beer
+    beers: [Beer!]!
+
+#    "REST-like" API:
+#    beer(beerId: ID!): Beer
+#    beerRatings(beerId: ID!): [Rating!]
+
 }

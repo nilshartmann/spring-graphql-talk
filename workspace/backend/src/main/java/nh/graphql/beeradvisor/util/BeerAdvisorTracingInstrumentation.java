@@ -19,7 +19,7 @@ import static graphql.schema.GraphQLTypeUtil.simplePrint;
  * TracingInstrumentation, very similiar to original {@link TracingInstrumentation}
  * but writes durations in ms and adds some other informations
  */
-//@Component
+@Component
 public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
     @Override
     public InstrumentationState createState() {
