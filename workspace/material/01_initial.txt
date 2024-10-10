@@ -15,6 +15,17 @@ type Beer  {
     ratings: [Rating!]!
 }
 
+type User {
+  id: ID!
+  login: String!
+  name: String!
+}
+
+extend type Rating {
+  author: User!
+}
+
+
 
 
 type Query {
