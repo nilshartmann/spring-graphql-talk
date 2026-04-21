@@ -37,11 +37,12 @@ public class BeerAdvisorService {
   }
 
 
-  public Integer calculateAverageStars(Beer beer) {
+  @Async
+  public CompletableFuture<Integer> calculateAverageStars(Beer beer) {
     slowdown(500);
     var result = (int) Math.round(beer.getRatings().stream().mapToInt(Rating::getStars).average().orElse(0));
 
-    return result;
+    return CompletableFuture.completedFuture(result);
   }
 
   public static void slowdown(long l) {

@@ -17,6 +17,7 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 public class BeerAdvisorGraphQLController {
@@ -71,7 +72,7 @@ public class BeerAdvisorGraphQLController {
 
 
     @SchemaMapping
-    public Integer averageStars(Beer beer) {
+    public CompletableFuture<Integer> averageStars(Beer beer) {
         // -> wie lange dauert das? Warum
         //  query { beers { id averageStars } }
         // -> Tracing!
