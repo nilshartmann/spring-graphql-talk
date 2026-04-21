@@ -2,8 +2,8 @@ package nh.graphql.beeradvisor.domain;
 
 import nh.graphql.beeradvisor.auth.User;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +24,7 @@ public class Beer {
   @NotNull
   private String price;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Rating> ratings = new LinkedList<>();
 
   protected Beer() {

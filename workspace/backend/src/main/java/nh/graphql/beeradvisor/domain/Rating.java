@@ -5,8 +5,8 @@ import nh.graphql.beeradvisor.auth.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -79,5 +79,9 @@ public class Rating {
   @Override
   public int hashCode() {
     return Objects.hash(id);
+  }
+
+  public String toString() {
+    return "[Rating id=" + this.id + ", userId=" + this.userId + "]";
   }
 }

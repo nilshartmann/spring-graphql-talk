@@ -3,14 +3,17 @@ package nh.graphql.beeradvisor.util;
 import graphql.com.google.common.collect.ImmutableList;
 import graphql.execution.ExecutionStepInfo;
 import graphql.execution.instrumentation.InstrumentationState;
+import graphql.execution.instrumentation.parameters.InstrumentationCreateStateParameters;
 import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.execution.instrumentation.tracing.TracingSupport;
 import graphql.schema.DataFetchingEnvironment;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static graphql.schema.GraphQLTypeUtil.simplePrint;
@@ -21,17 +24,20 @@ import static graphql.schema.GraphQLTypeUtil.simplePrint;
  */
 //@Component
 public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
-    @Override
+
+    private final static boolean includeTrivialFetchers = false;
+
     public InstrumentationState createState() {
-        return new TracingSupport(false) {
+        return new TracingSupport(includeTrivialFetchers) {
             private final ConcurrentLinkedQueue<Map<String, Object>> fieldData = new ConcurrentLinkedQueue<>();
             private final Map<String, Object> parseMap = new LinkedHashMap<>();
             private final Map<String, Object> validationMap = new LinkedHashMap<>();
             private final long startRequestMillis = System.currentTimeMillis();
 
             public TracingContext beginField(DataFetchingEnvironment dataFetchingEnvironment, boolean trivialDataFetcher) {
-                if (trivialDataFetcher) {
+                if (!includeTrivialFetchers && trivialDataFetcher) {
                     return () -> {
+                        // nothing to do
                     };
                 }
 
@@ -107,5 +113,10 @@ public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
             }
         };
 
+    }
+
+    @Override
+    public @Nullable CompletableFuture<InstrumentationState> createStateAsync(InstrumentationCreateStateParameters parameters) {
+        return CompletableFuture.completedFuture(createState());
     }
 }
