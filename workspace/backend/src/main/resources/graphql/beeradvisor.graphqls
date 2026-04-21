@@ -19,6 +19,9 @@ type Rating {
 
   comment: String!
   stars: Int!
+
+    """Who has written this Rating?"""
+    author: User!
 }
 
 extend type Beer {
@@ -46,5 +49,11 @@ type Mutation {
     # addRating(ratingInput: AddRatingInput): Rating!
 
     addRating(ratingInput: AddRatingInput!): AddRatingResult!
+}
+
+type User {
+    id: ID!
+    login: String!
+    name: String!
 }
 
