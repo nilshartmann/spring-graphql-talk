@@ -2,11 +2,16 @@ package nh.graphql.beeradvisor.graphql;
 
 import nh.graphql.beeradvisor.auth.User;
 import nh.graphql.beeradvisor.auth.UserService;
+import nh.graphql.beeradvisor.domain.Beer;
 import nh.graphql.beeradvisor.domain.BeerAdvisorService;
 import nh.graphql.beeradvisor.domain.BeerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+
+import java.util.Optional;
 
 @Controller
 public class BeerAdvisorGraphQLController {
@@ -20,6 +25,16 @@ public class BeerAdvisorGraphQLController {
         this.beerRepository = beerRepository;
         this.beerAdvisorService = beerAdvisorService;
         this.userService = userService;
+    }
+
+    @QueryMapping
+    public Iterable<Beer> beers() {
+        return beerRepository.findAll();
+    }
+
+    @QueryMapping
+    public Optional<Beer> beer(@Argument String beerId) {
+        return beerRepository.findById(beerId);
     }
 
 }
