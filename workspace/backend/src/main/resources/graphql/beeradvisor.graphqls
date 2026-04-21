@@ -30,7 +30,18 @@ input AddRatingInput {
     stars: Int!
 }
 
-type Mutation {
-    addRating(ratingInput: AddRatingInput): Rating!
+type AddRatingSuccess  {
+    newRating: Rating!
+}
+type AddRatingError  {
+    message: String!
+    code: Int!
 }
 
+union AddRatingResult = AddRatingError | AddRatingSuccess
+
+type Mutation {
+    # addRating(ratingInput: AddRatingInput): Rating!
+
+    addRating(ratingInput: AddRatingInput!): AddRatingResult!
+}

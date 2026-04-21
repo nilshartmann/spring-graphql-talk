@@ -1,5 +1,7 @@
 package nh.graphql.beeradvisor.graphql;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import nh.graphql.beeradvisor.auth.User;
 import nh.graphql.beeradvisor.auth.UserService;
 import nh.graphql.beeradvisor.domain.Beer;
@@ -39,19 +41,31 @@ public class BeerAdvisorGraphQLController {
         return beerRepository.findById(beerId);
     }
 
-    record AddRatingInput(String beerId, String userId, String comment, int stars) {
+    record AddRatingInput(String beerId, String userId, String comment, @Max(5) int stars) {
+    }
+
+    interface AddRatingResult {
+    }
+
+    record AddRatingSuccess(Rating newRating) implements AddRatingResult {
+    }
+
+    record AddRatingError(String message, int code) implements AddRatingResult {
     }
 
     @MutationMapping
-    Rating addRating(@Argument AddRatingInput ratingInput) {
+    AddRatingResult addRating(@Valid @Argument AddRatingInput ratingInput) {
         logger.debug("Rating Input {}", ratingInput);
-        var newRating = beerAdvisorService.addRating(ratingInput.userId(),
-            ratingInput.beerId(),
-            ratingInput.comment(),
-            ratingInput.stars()
-        );
-
-        return newRating;
+        try {
+            var newRating = beerAdvisorService.addRating(ratingInput.userId(),
+                ratingInput.beerId(),
+                ratingInput.comment(),
+                ratingInput.stars()
+            );
+            return new AddRatingSuccess(newRating);
+        } catch (Exception ex) {
+            return new AddRatingError(ex.getMessage(), 666);
+        }
     }
 
 }
