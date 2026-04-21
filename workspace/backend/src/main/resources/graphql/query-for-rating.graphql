@@ -1,0 +1,12 @@
+# Beispiel 3: Fuer Rating muss keine Controller-Methode
+#  implementiert werden
+{
+    beer(beerId: "B1") {
+        id
+        price
+        ratings {
+            id
+            comment
+        }
+    }
+}

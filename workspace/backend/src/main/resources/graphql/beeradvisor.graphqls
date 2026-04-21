@@ -11,3 +11,14 @@ type Query {
     beer(beerId: ID): Beer
     beers: [Beer!]!
 }
+
+type Rating {
+  id: ID!
+
+  comment: String!
+  stars: Int!
+}
+
+extend type Beer {
+    ratings: [Rating!]!
+}
