@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.Optional;
@@ -67,5 +68,16 @@ public class BeerAdvisorGraphQLController {
             return new AddRatingError(ex.getMessage(), 666);
         }
     }
+
+
+    @SchemaMapping
+    public Integer averageStars(Beer beer) {
+        // -> wie lange dauert das? Warum
+        //  query { beers { id averageStars } }
+        // -> Tracing!
+        return beerAdvisorService.calculateAverageStars(beer);
+    }
+
+
 
 }

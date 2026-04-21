@@ -5,6 +5,8 @@ type Beer  {
     Price must not be higher than **ten euros**
     """
     price: String!
+
+    averageStars: Int!
 }
 
 type Query {
@@ -45,3 +47,4 @@ type Mutation {
 
     addRating(ratingInput: AddRatingInput!): AddRatingResult!
 }
+
