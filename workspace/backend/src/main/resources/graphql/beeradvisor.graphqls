@@ -1,3 +1,13 @@
-type Query  {
-    ping: String
+type Beer  {
+    id: ID!
+    name: String!
+    """
+    Price must not be higher than **ten euros**
+    """
+    price: String!
+}
+
+type Query {
+    beer(beerId: ID): Beer
+    beers: [Beer!]!
 }

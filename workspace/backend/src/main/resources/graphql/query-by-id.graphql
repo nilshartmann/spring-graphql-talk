@@ -1,0 +1,18 @@
+# Beispiel 1: Suche nach Bier liefert ohne Controller
+#   null zurueck
+{
+    beer(beerId: "B1") {
+        id
+        price
+    }
+}
+
+# Beispiel 2: Suche nach Bieren liefert ohne Controller
+#   Fehler zurueck
+# {
+#    beers {
+#        id
+#        price
+#    }
+# }
+
