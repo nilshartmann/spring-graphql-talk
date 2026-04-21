@@ -1,6 +1,6 @@
 package nh.graphql.beeradvisor.graphql;
 
-import javax.validation.constraints.Max;
+import jakarta.validation.constraints.Max;
 
 /**
  * @author Nils Hartmann (nils@nilshartmann.net)

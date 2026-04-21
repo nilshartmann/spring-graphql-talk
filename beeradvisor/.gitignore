@@ -8,3 +8,5 @@ build
 *.iml
 
 beeradvisor-db-data/
+
+target/

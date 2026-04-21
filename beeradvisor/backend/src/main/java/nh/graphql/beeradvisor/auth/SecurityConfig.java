@@ -2,24 +2,22 @@ package nh.graphql.beeradvisor.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Nils Hartmann (nils@nilshartmann.net)
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableMethodSecurity
+public class SecurityConfig {
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
   @Bean
@@ -27,14 +25,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new JwtAuthenticationFilter();
   }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/").permitAll()
+            .anyRequest().permitAll());
 
     // for h2 explorer
-    http.headers().frameOptions().sameOrigin();
+    http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
-    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     http.addFilterBefore(authenticationTokenFilter(), BasicAuthenticationFilter.class);
+
+    return http.build();
   }
 }

@@ -21,7 +21,6 @@ import static graphql.schema.GraphQLTypeUtil.simplePrint;
  */
 //@Component
 public class BeerAdvisorTracingInstrumentation extends TracingInstrumentation {
-  @Override
   public InstrumentationState createState() {
     return new TracingSupport(false) {
       private final ConcurrentLinkedQueue<Map<String, Object>> fieldData = new ConcurrentLinkedQueue<>();
